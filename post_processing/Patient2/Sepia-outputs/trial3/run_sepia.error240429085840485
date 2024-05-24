@@ -1,0 +1,27 @@
+The identifier was:
+MATLAB:badsubscript
+
+The message was:
+
+Index exceeds the number of array elements. Index must not exceed 1.
+
+Error in extract_CSF (line 43)
+    numPixels_sorted(i);
+
+Error in QSMMacro (line 92)
+                mask_ref    = extract_CSF(r2s,mask,voxelSize)>0;
+
+Error in QSMMacroIOWrapper (line 122)
+[chi,mask_ref] = QSMMacro(localField,mask_QSM,matrixSize,voxelSize,algorParam,headerAndExtraData);
+
+Error in sepiaIO (line 97)
+            QSMMacroIOWrapper(input,output,maskFullName,algorParam);
+
+Error in sepia_config (line 24)
+sepiaIO(input,output_basename,mask_filename,algorParam);
+
+Error in run (line 91)
+evalin('caller', strcat(script, ';'));
+
+Error in sepia>PushbuttonStart_Callback (line 353)
+    run(configFilename);

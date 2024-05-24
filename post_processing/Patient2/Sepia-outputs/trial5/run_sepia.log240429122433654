@@ -1,0 +1,45 @@
+SEPIA configuration file already exists in the output directory.
+Running script: H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_2\Sepia-outputs\trial5\sepia_config.m
+Running background field removal processing pipeline...
+Output directory       : H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_2\Sepia-outputs\trial5\
+Output filename prefix : Sepia_
+---------
+Load data
+---------
+Loading total field header files...Done.
+No field map standard deviation data is loaded.
+Input files are valid.
+SEPIA header data is loaded.
+Validating SEPIA header...
+Input SEPIA header is valid.
+----------------------
+Basic data information
+----------------------
+Voxel size(x,y,z)   = 0.5 mm x 0.5 mm x 5 mm
+Matrix size(x,y,z)  = 384 x 384 x 16
+B0 direction(x,y,z) = [0; 0; 1]
+Field strength      = 3 T
+Number of echoes    = 5
+TE1/dTE             = 16000/16000 ms
+-----------
+Signal mask
+-----------
+Mask file is checked.
+-----------------------------
+Background field removal step
+-----------------------------
+Zero-padding data if the input images have odd number matrix size...Done!
+Removing background field...
+The following method is being used: LBV
+The following parameters are being used...
+Tolerance    = 1
+Depth        = 5
+Peel         = 2
+tolerance=1, depth=5, peel=2, N1=30, N2=100, N3=100
+matrix size: 384 384 16
+voxel size: 0.5 0.5 5
+Done!
+Performing polynomial fitting...Done!
+Saving local field map...done!
+Saving mask for chi mapping...done!
+Processing pipeline is completed!

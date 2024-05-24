@@ -1,0 +1,38 @@
+SEPIA configuration file already exists in the output directory.
+Running script: H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_2\QSM\LBV\5\sepia_config.m
+Running QSM dipole inversion processing pipeline...
+Output directory       : H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_2\QSM\LBV\5\
+Output filename prefix : Sepia_
+---------
+Load data
+---------
+Loading local field header files...Done.
+Loading magnitude header files...Done.
+Input files are valid.
+SEPIA header data is loaded.
+Validating SEPIA header...
+Input SEPIA header is valid.
+----------------------
+Basic data information
+----------------------
+Voxel size(x,y,z)   = 0.5 mm x 0.5 mm x 5 mm
+Matrix size(x,y,z)  = 384 x 384 x 16
+B0 direction(x,y,z) = [0; 0; 1]
+Field strength      = 3 T
+Number of echoes    = 5
+TE1/dTE             = 16000/16000 ms
+-----------
+Signal mask
+-----------
+Mask file is checked.
+---------------------------
+Dipole field inversion step
+---------------------------
+Zero-padding data if the input images have odd number matrix size...Done!
+Computing QSM map...
+The following QSM algorithm will be used: TKD
+The following parameter is being used...
+K-space threshold value  = 1
+Threshold for k-space division is 1.000000 
+Saving susceptibility map...Done!
+Processing pipeline is completed!
