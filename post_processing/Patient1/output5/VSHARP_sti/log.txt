@@ -1,8 +1,0 @@
-trial 1
-smv = 2
-
-trial 2
-smv = 10
-
-trial 3
-smv = 20
