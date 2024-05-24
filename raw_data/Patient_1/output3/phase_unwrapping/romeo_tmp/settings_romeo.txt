@@ -1,0 +1,29 @@
+mmap-mag: true
+compute-B0: B0
+output: H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output3\phase_unwrapping\romeo_tmp
+mask-unwrapped: false
+weights: romeo3
+max-seeds: 1
+individual-unwrapping: false
+write-quality-all: false
+correct-global: false
+write-quality: false
+temporal-uncertain-unwrapping: false
+no-rescale: false
+magnitude: H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output3\phase_unwrapping\romeo_tmp\Mag.nii
+phase-offset-correction: off
+no-mmap: false
+wrap-addition: 0.0
+write-phase-offsets: false
+verbose: false
+neco: 5
+correct-regions: false
+merge-regions: false
+template: 1
+threshold: Inf
+mmap-phase: true
+multi-channel: false
+phase: H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output3\phase_unwrapping\romeo_tmp\Phase.nii
+filename: Unwrapped.nii
+Arguments: -p H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output3\phase_unwrapping\romeo_tmp\Phase.nii -o H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output3\phase_unwrapping\romeo_tmp\Unwrapped.nii -B -m H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output3\phase_unwrapping\romeo_tmp\Mag.nii -t [16000 32000 48000 64000 80000] -k qualitymask 0.5 --phase-offset-correction off
+RomeoApp version: 4.0.6

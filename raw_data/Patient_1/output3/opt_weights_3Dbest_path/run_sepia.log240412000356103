@@ -1,0 +1,103 @@
+SEPIA configuration file already exists in the output directory.
+Running script: H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output3\opt_weights_3Dbest_path\sepia_config.m
+Running total field recovery and phase unwrapping processing pipeline...
+Output directory       : H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output3\opt_weights_3Dbest_path\
+Output filename prefix : Sepia_
+---------
+Load data
+---------
+Loading phase header files...Done.
+Loading magnitude header files...Done.
+Validating input phase and magnitude images...Passed.
+Input files are valid.
+SEPIA header data is loaded.
+Validating SEPIA header...
+Input SEPIA header is valid.
+Values of input phase map exceed the range of [-pi,pi]. DICOM value is assumed.
+Rescaling phase data from DICOM image value to wrapped radian unit...Done.
+Saving phase images in unit of radian...Done.
+----------------------
+Basic data information
+----------------------
+Voxel size(x,y,z)   = 0.5 mm x 0.5 mm x 5 mm
+Matrix size(x,y,z)  = 384 x 384 x 16
+B0 direction(x,y,z) = [0; 0; 1]
+Field strength      = 3 T
+Number of echoes    = 5
+TE1/dTE             = 16000/16000 ms
+-----------
+Signal mask
+-----------
+No mask data is loaded. Using FSL BET to obtain brain mask.
+Performing FSL BET...
+384 384 16
+0.5 0.5 5
+2359296 
+fractional_threshold set to 0.500000
+gradient_threshold set to 0.000000
+Signal mask is obtained.
+Saving signal mask...Done!
+--------------------
+Total field recovery
+--------------------
+Calculating field map...
+Temporal phase unwrapping: Optimum weights 
+Unwrapping #1 echo shift...
+------------------------
+Spatial phase unwrapping
+------------------------
+Zero-padding data if the input images have odd number matrix size...Done!
+Unwrapping phase image...
+The following method is being used: 3D best path
+[Warning: Problem using this algorithm. Running MEDI region growing unwrapping instead...] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('UnwrapPhaseMacro', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\UnwrapPhaseMacro.m', 81)" style="font-weight:bold">UnwrapPhaseMacro</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\UnwrapPhaseMacro.m',81,0)">line 81</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Wrapper_EchoCombine_OptimumWeight', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\WrapperEchoCombine\Wrapper_EchoCombine_OptimumWeight.m', 55)" style="font-weight:bold">Wrapper_EchoCombine_OptimumWeight</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\WrapperEchoCombine\Wrapper_EchoCombine_OptimumWeight.m',55,0)">line 55</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('estimateTotalField', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\estimateTotalField.m', 73)" style="font-weight:bold">estimateTotalField</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\estimateTotalField.m',73,0)">line 73</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('UnwrapPhaseMacroIOWrapper', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\UnwrapPhaseMacroIOWrapper.m', 169)" style="font-weight:bold">UnwrapPhaseMacroIOWrapper</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\UnwrapPhaseMacroIOWrapper.m',169,0)">line 169</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sepiaIO', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\sepiaIO.m', 91)" style="font-weight:bold">sepiaIO</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\sepiaIO.m',91,0)">line 91</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sepia_config', 'H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output3\opt_weights_3Dbest_path\sepia_config.m', 25)" style="font-weight:bold">sepia_config</a> (<a href="matlab: opentoline('H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output3\opt_weights_3Dbest_path\sepia_config.m',25,0)">line 25</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', 'C:\Program Files\MATLAB\R2023a\toolbox\matlab\lang\run.m', 91)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023a\toolbox\matlab\lang\run.m',91,0)">line 91</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sepia>PushbuttonStart_Callback', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\sepia.m', 353)" style="font-weight:bold">sepia>PushbuttonStart_Callback</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\sepia.m',353,0)">line 353</a>)] 
+232295 voxels are unwrapped
+Done!
+Unwrapping #2 echo shift...
+------------------------
+Spatial phase unwrapping
+------------------------
+Zero-padding data if the input images have odd number matrix size...Done!
+Unwrapping phase image...
+The following method is being used: 3D best path
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('UnwrapPhase_3DBestPath')" style="font-weight:bold">UnwrapPhase_3DBestPath</a>
+
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Wrapper_Unwrap_3DBestPath', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\WrapperPhaseUnwrap\Wrapper_Unwrap_3DBestPath.m', 36)" style="font-weight:bold">Wrapper_Unwrap_3DBestPath</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\WrapperPhaseUnwrap\Wrapper_Unwrap_3DBestPath.m',36,0)">line 36</a>)
+unwrappedField = UnwrapPhase_3DBestPath(wrappedField,mask,matrixSize);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('UnwrapPhaseMacro', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\UnwrapPhaseMacro.m', 78)" style="font-weight:bold">UnwrapPhaseMacro</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\UnwrapPhaseMacro.m',78,0)">line 78</a>)
+            unwrappedField = feval(wrapper_Unwrap_function{k},wrappedField,mask,matrixSize_new,voxelSize,algorParam, headerAndExtraData);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Wrapper_EchoCombine_OptimumWeight', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\WrapperEchoCombine\Wrapper_EchoCombine_OptimumWeight.m', 55)" style="font-weight:bold">Wrapper_EchoCombine_OptimumWeight</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\WrapperEchoCombine\Wrapper_EchoCombine_OptimumWeight.m',55,0)">line 55</a>)
+        tmp = UnwrapPhaseMacro(tmp,mask,matrixSize,voxelSize,algorParam,headerAndExtraData);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('estimateTotalField', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\estimateTotalField.m', 73)" style="font-weight:bold">estimateTotalField</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\estimateTotalField.m',73,0)">line 73</a>)
+        [totalField, N_std, headerAndExtraData] = feval(wrapper_EchoCombine_function{k},fieldMap,mask,matrixSize_tmp,voxelSize,algorParam,headerAndExtraData);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('UnwrapPhaseMacroIOWrapper', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\UnwrapPhaseMacroIOWrapper.m', 169)" style="font-weight:bold">UnwrapPhaseMacroIOWrapper</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\UnwrapPhaseMacroIOWrapper.m',169,0)">line 169</a>)
+[totalField,fieldmapSD,fieldmapUnwrapAllEchoes,mask] = estimateTotalField(fieldMap,mask,matrixSize,voxelSize,algorParam,headerAndExtraData);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sepiaIO', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\sepiaIO.m', 91)" style="font-weight:bold">sepiaIO</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\sepiaIO.m',91,0)">line 91</a>)
+            UnwrapPhaseMacroIOWrapper(input,output,maskFullName,algorParam);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sepia_config', 'H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output3\opt_weights_3Dbest_path\sepia_config.m', 25)" style="font-weight:bold">sepia_config</a> (<a href="matlab: opentoline('H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output3\opt_weights_3Dbest_path\sepia_config.m',25,0)">line 25</a>)
+sepiaIO(input,output_basename,mask_filename,algorParam);
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', 'C:\Program Files\MATLAB\R2023a\toolbox\matlab\lang\run.m', 91)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023a\toolbox\matlab\lang\run.m',91,0)">line 91</a>)
+evalin('caller', strcat(script, ';'));
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sepia>PushbuttonStart_Callback', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\sepia.m', 353)" style="font-weight:bold">sepia>PushbuttonStart_Callback</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\sepia.m',353,0)">line 353</a>)
+    run(configFilename);
+} 
+Interrupt while evaluating UIControl Callback.
+
+clc
+sepia

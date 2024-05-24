@@ -1,0 +1,16 @@
+trial1
+MEDI nonlinear fit for echo phase combination 
+Region Growing with MEDI for phase unwrapping (spatial)
+Exluding vocels using residual, threshold 0
+weighting map
+
+trial 2
+threshold to 0.5
+
+trial 3
+spatial phase unwrapping to 3D best path
+>> 3D best path algorithm not used a problem in the Wrapper Echo Combine non linear fit
+
+trial 4
+returning to same as trial 2 
+chaning threshold to 0.9

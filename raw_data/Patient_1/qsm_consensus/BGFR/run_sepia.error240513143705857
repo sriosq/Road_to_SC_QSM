@@ -1,0 +1,33 @@
+The identifier was:
+MATLAB:badsubscript
+
+The message was:
+
+Index in position 3 is invalid. Array indices must be positive integers or logical values.
+
+Error in SphereKernel (line 34)
+Kernel( 1+matrixSize(1)/2 - radius : 1+matrixSize(1)/2 + radius, ...
+
+Error in BKGRemovalVSHARP (line 45)
+    sphereKernel = SphereKernel(matrixSize,radiusCurrent);
+
+Error in Wrapper_BFR_VSHARP (line 41)
+[RDF,~] = BKGRemovalVSHARP(totalField,mask,matrixSize,'radius',radius);
+
+Error in BackgroundRemovalMacro (line 88)
+        RDF = feval(wrapper_BFR_function{k},totalField,mask,matrixSize_new,voxelSize,algorParam, headerAndExtraData);
+
+Error in BackgroundRemovalMacroIOWrapper (line 122)
+localField = BackgroundRemovalMacro(totalField,maskLocalfield,matrixSize,voxelSize,algorParam,headerAndExtraData);
+
+Error in sepiaIO (line 94)
+            BackgroundRemovalMacroIOWrapper(input,output,maskFullName,algorParam);
+
+Error in sepia_config_1 (line 27)
+sepiaIO(input,output_basename,mask_filename,algorParam);
+
+Error in run (line 91)
+evalin('caller', strcat(script, ';'));
+
+Error in sepia>PushbuttonStart_Callback (line 353)
+    run(configFilename);

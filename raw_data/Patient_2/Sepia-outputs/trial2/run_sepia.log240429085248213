@@ -1,0 +1,57 @@
+SEPIA configuration file already exists in the output directory.
+Running script: H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_2\Sepia-outputs\trial2\sepia_config.m
+Running total field recovery and phase unwrapping processing pipeline...
+Output directory       : H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_2\Sepia-outputs\trial2\
+Output filename prefix : Sepia_
+---------
+Load data
+---------
+Loading phase header files...Done.
+Loading magnitude header files...Done.
+Validating input phase and magnitude images...Passed.
+Input files are valid.
+SEPIA header data is loaded.
+Validating SEPIA header...
+Input SEPIA header is valid.
+Values of input phase map exceed the range of [-pi,pi]. DICOM value is assumed.
+Rescaling phase data from DICOM image value to wrapped radian unit...Done.
+Saving phase images in unit of radian...Done.
+----------------------
+Basic data information
+----------------------
+Voxel size(x,y,z)   = 0.5 mm x 0.5 mm x 5 mm
+Matrix size(x,y,z)  = 384 x 384 x 16
+B0 direction(x,y,z) = [0; 0; 1]
+Field strength      = 3 T
+Number of echoes    = 5
+TE1/dTE             = 16000/16000 ms
+-----------
+Signal mask
+-----------
+Mask file is checked.
+--------------------
+Total field recovery
+--------------------
+Calculating field map...
+Temporal phase unwrapping: MEDI nonlinear fit 
+------------------------
+Spatial phase unwrapping
+------------------------
+Zero-padding data if the input images have odd number matrix size...Done!
+Unwrapping phase image...
+The following method is being used: SEGUE
+[Warning: Problem using this algorithm. Running MEDI region growing unwrapping instead...] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('UnwrapPhaseMacro', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\UnwrapPhaseMacro.m', 81)" style="font-weight:bold">UnwrapPhaseMacro</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\UnwrapPhaseMacro.m',81,0)">line 81</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('Wrapper_EchoCombine_MEDInonlinearfit', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\WrapperEchoCombine\Wrapper_EchoCombine_MEDInonlinearfit.m', 53)" style="font-weight:bold">Wrapper_EchoCombine_MEDInonlinearfit</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\WrapperEchoCombine\Wrapper_EchoCombine_MEDInonlinearfit.m',53,0)">line 53</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('estimateTotalField', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\estimateTotalField.m', 73)" style="font-weight:bold">estimateTotalField</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\estimateTotalField.m',73,0)">line 73</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('UnwrapPhaseMacroIOWrapper', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\UnwrapPhaseMacroIOWrapper.m', 169)" style="font-weight:bold">UnwrapPhaseMacroIOWrapper</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\wrapper\UnwrapPhaseMacroIOWrapper.m',169,0)">line 169</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sepiaIO', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\sepiaIO.m', 91)" style="font-weight:bold">sepiaIO</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\sepiaIO.m',91,0)">line 91</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sepia_config', 'H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_2\Sepia-outputs\trial2\sepia_config.m', 24)" style="font-weight:bold">sepia_config</a> (<a href="matlab: opentoline('H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_2\Sepia-outputs\trial2\sepia_config.m',24,0)">line 24</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('run', 'C:\Program Files\MATLAB\R2023a\toolbox\matlab\lang\run.m', 91)" style="font-weight:bold">run</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2023a\toolbox\matlab\lang\run.m',91,0)">line 91</a>)
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sepia>PushbuttonStart_Callback', 'D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\sepia.m', 353)" style="font-weight:bold">sepia>PushbuttonStart_Callback</a> (<a href="matlab: opentoline('D:\Poly_MSc_Code\libraries_and_toolboxes\sepia\sepia.m',353,0)">line 353</a>)] 
+102400 voxels are unwrapped
+Done!
+The resulting field map with the following unit: Hz
+Saving unwrapped fieldmap...Done.
+Computing weighting map...Done!
+Processing pipeline is completed!
