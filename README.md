@@ -1,4 +1,4 @@
-# brainhack_project
+# Mapping Susceptibility values of the Spinal Cord
 Repository following Project Managment for the Brainhack project - summer 2024
 
 In this repository you will find the spinal cord data from 3 patients.
