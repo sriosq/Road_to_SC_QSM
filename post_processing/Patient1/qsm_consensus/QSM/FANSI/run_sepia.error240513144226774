@@ -1,0 +1,30 @@
+The identifier was:
+MATLAB:UndefinedFunction
+
+The message was:
+
+Undefined function 'gradient_calc' for input arguments of type 'double'.
+
+Error in FANSI_4sepia_v3 (line 44)
+    Gm = gradient_calc(magn,gmode);
+
+Error in Wrapper_QSM_FANSI (line 165)
+    chi = FANSI_4sepia_v3( localField, wmap, alpha1, options );
+
+Error in QSMMacro (line 108)
+        chi = feval(wrapper_QSM_function{k},localField,mask,matrixSize_new,voxelSize,algorParam, headerAndExtraData);
+
+Error in QSMMacroIOWrapper (line 122)
+[chi,mask_ref] = QSMMacro(localField,mask_QSM,matrixSize,voxelSize,algorParam,headerAndExtraData);
+
+Error in sepiaIO (line 97)
+            QSMMacroIOWrapper(input,output,maskFullName,algorParam);
+
+Error in sepia_config (line 35)
+sepiaIO(input,output_basename,mask_filename,algorParam);
+
+Error in run (line 91)
+evalin('caller', strcat(script, ';'));
+
+Error in sepia>PushbuttonStart_Callback (line 353)
+    run(configFilename);

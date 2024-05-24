@@ -1,0 +1,11 @@
+SEPIA configuration file already exists in the output directory.
+Running script: H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\qsm_consensus\QSM\MEDI\sepia_config.m
+Running QSM dipole inversion processing pipeline...
+Output directory       : H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\qsm_consensus\QSM\MEDI\
+Output filename prefix : Sepia_
+---------
+Load data
+---------
+Loading local field header files...Done.
+No magnitude data is loaded.
+There was an error! Please check the command window/error message file for more information.

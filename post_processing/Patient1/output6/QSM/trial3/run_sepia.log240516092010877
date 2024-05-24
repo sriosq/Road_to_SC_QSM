@@ -1,0 +1,59 @@
+SEPIA configuration file already exists in the output directory.
+Running script: H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output6\QSM\trial3\sepia_config_1.m
+Running QSM dipole inversion processing pipeline...
+Output directory       : H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output6\QSM\trial3\
+Output filename prefix : Sepia_
+---------
+Load data
+---------
+Loading local field header files...Done.
+Loading magnitude header files...Done.
+Input files are valid.
+SEPIA header data is loaded.
+Validating SEPIA header...
+Input SEPIA header is valid.
+----------------------
+Basic data information
+----------------------
+Voxel size(x,y,z)   = 0.5 mm x 0.5 mm x 5 mm
+Matrix size(x,y,z)  = 384 x 384 x 16
+B0 direction(x,y,z) = [0; 0; 1]
+Field strength      = 3 T
+Number of echoes    = 5
+TE1/dTE             = 16000/16000 ms
+-----------
+Signal mask
+-----------
+Mask file is checked.
+---------------------------
+Dipole field inversion step
+---------------------------
+Zero-padding data if the input images have odd number matrix size...Done!
+Computing QSM map...
+The following QSM algorithm will be used: MEDI
+The following parameters are being used...
+Regularisation lambda	= 1000
+Data mode                = 1
+Zero padding (x,y,z)     = 0  0  0
+Mask precentage (%)      = 90
+Is SMV?                  = 1
+Radius                   = 5
+Is Merit?                = 1
+Use CSF regularisation?  = 0
+Using gaussnewton
+iter: 1; res_norm_ratio:     Inf; cost_L2:170.2583; cost:11767.3066.
+Elapsed time is 7.985441 seconds.
+iter: 2; res_norm_ratio:  2.6896; cost_L2:136.3745; cost:69515.3281.
+Elapsed time is 9.320459 seconds.
+iter: 3; res_norm_ratio:  0.8210; cost_L2: 98.1942; cost:140244.6719.
+Elapsed time is 9.216740 seconds.
+iter: 4; res_norm_ratio:  0.3435; cost_L2: 69.8781; cost:182979.8125.
+Elapsed time is 9.284190 seconds.
+iter: 5; res_norm_ratio:  0.1956; cost_L2: 49.5072; cost:204657.9688.
+Elapsed time is 9.808340 seconds.
+iter: 6; res_norm_ratio:  0.1279; cost_L2: 35.0877; cost:215357.0625.
+Elapsed time is 10.423663 seconds.
+iter: 7; res_norm_ratio:  0.0871; cost_L2: 22.4259; cost:220622.2500.
+Elapsed time is 10.543404 seconds.
+Saving susceptibility map...Done!
+Processing pipeline is completed!

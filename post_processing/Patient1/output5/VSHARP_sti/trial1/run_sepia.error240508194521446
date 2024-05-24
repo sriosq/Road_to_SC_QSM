@@ -1,0 +1,29 @@
+The identifier was:
+MATLAB:badnullindex
+
+The message was:
+
+Deletion requires an existing variable.
+
+Error in V_SHARP
+
+Error in Wrapper_BFR_VSHARPSTI (line 40)
+RDF = V_SHARP(totalField, mask,'voxelsize',voxelSize(:)','smvsize',radius);
+
+Error in BackgroundRemovalMacro (line 88)
+        RDF = feval(wrapper_BFR_function{k},totalField,mask,matrixSize_new,voxelSize,algorParam, headerAndExtraData);
+
+Error in BackgroundRemovalMacroIOWrapper (line 122)
+localField = BackgroundRemovalMacro(totalField,maskLocalfield,matrixSize,voxelSize,algorParam,headerAndExtraData);
+
+Error in sepiaIO (line 94)
+            BackgroundRemovalMacroIOWrapper(input,output,maskFullName,algorParam);
+
+Error in sepia_config (line 27)
+sepiaIO(input,output_basename,mask_filename,algorParam);
+
+Error in run (line 91)
+evalin('caller', strcat(script, ';'));
+
+Error in sepia>PushbuttonStart_Callback (line 353)
+    run(configFilename);

@@ -1,0 +1,22 @@
+Chi-sep toolbox configuration
+
+**************************************************
+Input data
+
+**************************************************
+Brain mask generate
+- method: BET (MEDI)
+
+Phase unwrapping
+- method: Laplacian (STI Suite)
+
+Background field removal
+- method: VSHARP
+
+QSM
+- method: iLSQR
+
+**************************************************
+Start time: 02-19-24 12.29.28
+End time: 02-19-24 12.29.55
+Processing time: 00:00:26

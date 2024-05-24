@@ -1,0 +1,59 @@
+SEPIA configuration file already exists in the output directory.
+Running script: H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output3\phase_unwrapping\sepia_config.m
+Running total field recovery and phase unwrapping processing pipeline...
+Output directory       : H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output3\phase_unwrapping\
+Output filename prefix : Sepia_
+---------
+Load data
+---------
+Loading phase header files...Done.
+Loading magnitude header files...Done.
+Validating input phase and magnitude images...Passed.
+Input files are valid.
+SEPIA header data is loaded.
+Validating SEPIA header...
+Input SEPIA header is valid.
+Values of input phase map exceed the range of [-pi,pi]. DICOM value is assumed.
+Rescaling phase data from DICOM image value to wrapped radian unit...Done.
+Saving phase images in unit of radian...Done.
+----------------------
+Basic data information
+----------------------
+Voxel size(x,y,z)   = 0.5 mm x 0.5 mm x 5 mm
+Matrix size(x,y,z)  = 384 x 384 x 16
+B0 direction(x,y,z) = [0; 0; 1]
+Field strength      = 3 T
+Number of echoes    = 5
+TE1/dTE             = 16000/16000 ms
+-----------
+Signal mask
+-----------
+No mask data is loaded. Using FSL BET to obtain brain mask.
+Performing FSL BET...
+384 384 16
+0.5 0.5 5
+2359296 
+fractional_threshold set to 0.500000
+gradient_threshold set to 0.000000
+Signal mask is obtained.
+Saving signal mask...Done!
+--------------------
+Total field recovery
+--------------------
+Calculating field map...
+Temporal phase unwrapping: ROMEO total field calculation 
+ROMEO command: "D:\Poly_MSc_Code\libraries_and_toolboxes\toolboxes\mritools_windows-2019_4.0.6\matlab\..\bin\romeo.exe" "-p" "H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output3\phase_unwrapping\romeo_tmp\Phase.nii" "-o" "H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output3\phase_unwrapping\romeo_tmp\Unwrapped.nii" "-B" "-m" "H:\My Drive\Maitrise\Project\Data\first qsm trial\Patient_1\output3\phase_unwrapping\romeo_tmp\Mag.nii" "-t" "[16000 32000 48000 64000 80000]" "-k" "qualitymask 0.5" "--phase-offset-correction" "off"
+ERROR: masking option 'qualitymask 0.5' is undefinedStacktrace:
+ [1] error(s::String)
+   @ Base .\error.jl:35
+ [2] set_mask!(data::Dict{String, AbstractArray}, settings::Dict{String, Any})
+   @ RomeoApp C:\Users\runneradmin\.julia\packages\ROMEO\CyQmx\ext\RomeoApp\caller.jl:217
+ [3] unwrapping_main(args::Vector{String}; version::String)
+   @ RomeoApp C:\Users\runneradmin\.julia\packages\ROMEO\CyQmx\ext\RomeoApp\caller.jl:15
+ [4] unwrapping_main
+   @ C:\Users\runneradmin\.julia\packages\ROMEO\CyQmx\ext\RomeoApp\caller.jl:1 [inlined]
+ [5] romeo()
+   @ App D:\a\CompileMRI.jl\CompileMRI.jl\App\src\App.jl:20
+ [6] top-level scope
+   @ none:1
+There was an error! Please check the command window/error message file for more information.

@@ -1,0 +1,22 @@
+The identifier was:
+
+
+The message was:
+
+Error using QSMMacroIOWrapper>io_02_validate_nifti_input
+MEDI requires magnitude data. Please put the magnitude multi-echo data to input directory or use other algorithm
+
+Error in QSMMacroIOWrapper (line 73)
+availableFileList           = io_02_validate_nifti_input(inputFileList, algorParam);
+
+Error in sepiaIO (line 97)
+            QSMMacroIOWrapper(input,output,maskFullName,algorParam);
+
+Error in sepia_config (line 32)
+sepiaIO(input,output_basename,mask_filename,algorParam);
+
+Error in run (line 91)
+evalin('caller', strcat(script, ';'));
+
+Error in sepia>PushbuttonStart_Callback (line 353)
+    run(configFilename);
