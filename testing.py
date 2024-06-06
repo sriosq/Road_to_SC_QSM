@@ -18,11 +18,9 @@ labels = ct_wb_seg.get_fdata()
 ct_wb_data.shape
 
 
-full_body_phantom = Volume(labels)
+sus_dist = np.zeros(labels.shape)
 
-full_body_phantom.manual_labeling()
-
-full_body_phantom.set_susceptibility()
+print(type(labels.shape))
 
 
 

@@ -50,6 +50,7 @@ class Cylindrical:
         return np.where(self.mask() == True, self.sus_diff, 0)
 
 def computed_Bz(matrix, image_res, sus_dist, buffer):
+    #Buffer we take only a limited space in k-space 
 
     # creating the k-space grid
     dim = buffer*matrix
