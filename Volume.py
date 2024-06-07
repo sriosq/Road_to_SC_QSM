@@ -6,8 +6,8 @@ class Volume:
     #establcer relacion volumen label
     
     def __init__(self, volume):
-        # we will recieve a 3D so we will follow the convention of labeling for full body scans
-        # The 3D volume data will be a np array? or maybe it should be a nifti file and then I can manually
+        # we will recieve a 3D, so we will follow the convention of labeling for full body scans
+        # The 3D volume data will be a np array? or maybe it should be a nifti file, and then I can manually
         # get_fdata?
 
         self.volume = volume
@@ -18,35 +18,92 @@ class Volume:
         # The dictionary has keys for every id number and each value 
         # is the corresponding SegmentationLabel daughter class
 
-        self.create_segmentation_labels()
+        self.create_labels()
+        # This is the Convention Dictionary for labels_id - names - sus_values
 
-    #def set_label_name(self, label_id, name):
-        #for label in self.segmentation_labels:
-            #if label.label_id == label_id:
-                #label.set_name(name)
-                
+    def create_labels(self):
+       for label_id in self.uniq_labels:
+           self.segmentation_labels[label_id] = SegmentationLabel(label_id)
+
     def create_segmentation_labels(self):
+
         # The most important labels are:
         # lungs Bone Soft Tissue SpinalCord CSF
-        # We can create a already pre-defined
-        self.set_label_name(76,"Spinal Cord")
+        # These are the regions of the body that impact the most
+        #
+        # We can create an already pre-defined from convention of label_ids
+
+        # In TotalSegmentator this is labeld Spinal Cord but
+        # it really is the Spinal Canal = Spinal Cord + CSF
+        self.set_label_name(76,"SpinalCanal")
+        # For SC is (GM + WM)/2 = -9.055
+        # From Eva's code GM = -9.03 and WM = -9.08
+        self.set_label_susceptibility(76,-9.055)
+
         # For the lungs we have [9,10,11,12,13]
         for i in [9,10,11,12,13]:
             self.set_label_name(i,'Lungs')
             self.set_label_susceptibility(i,0.35)
+
         # For the bones we have a lot more labels
         # Vertebrae and ribs. But all of them can have the same value: -11.1
-        for label_id in self.uniq_labels:
-            self.segmentation_labels[label_id] = SegmentationLabel(label_id)
+        # Vertebrae list goes from Sacrum to C1
+        vertebra_list = np.arange(22,48)
+        rib_list = np.append(np.arange(89,114),[68,69,70,71,74,75,88])
+        for i in vertebra_list:
+            self.set_label_name(i,"Vertebrae")
+            self.set_label_susceptibility(i,-11.1)
+
+        for i in rib_list:
+            self.set_label_name(i, "Bone")
+            self.set_label_susceptibility(i, -11.1)
+
+        # Last but not least is to give susceptibility values to the organs
+        # and soft tissue => susceptibility value of water = -9.05
+
+        sus_water_list = [14, 15, 8, 7, 16]
+
+        self.set_label_name(14, "Esophagus")
+        self.set_label_name(15, "Trachea")
+        self.set_label_name(7, "AdrenalGland")
+        self.set_label_name(8, "AdrenalGland")
+        self.set_label_name(16, "Thyroid Gland")
+
+        # Susceptibility value of fat = -8.39
+
+        for i in sus_water_list:
+            self.set_label_susceptibility(i, -9.05)
+
+        # Soft tissue == water
+        # Inside of body == fat
+
+        self.set_label_name(87, "Brain")
+
+        self.set_label_name(0,'Air') # Outside of brain
+        self.set_label_susceptibility(0,0.35)
+
+        # If label has not been set it can be considered as fat
+        # susceptibility of fat = -8.39
+
+        self.set_label_name(264,"Fat")
+        self.set_label_susceptibility(264,-8.39)
+
+
+
+
 
     def set_label_name(self, label_id, name):
-        if label_id in self.segmentation_labels:
+
+        if label_id in self.uniq_labels:
+
+
             self.segmentation_labels[label_id].set_name(name)
         else:
             print(f"Label ID {label_id} not found.")
 
     def set_label_susceptibility(self, label_id, susceptibility):
-        if label_id in self.segmentation_labels:
+        if label_id in self.uniq_labels:
+            # SImilar to set_label_name
             self.segmentation_labels[label_id].set_susceptibility(susceptibility)
         else:
             print(f"Label ID {label_id} not found.")
@@ -86,6 +143,8 @@ class Volume:
 
 
     def compute_Bz(self, res, buffer):
+        #For later implementation
+
         # res is resolution from the img heaer => pixdim
         # Buffer is an int to rescale kspace
 

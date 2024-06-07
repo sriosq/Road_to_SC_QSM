@@ -2,10 +2,11 @@
 import numpy as np
 
 class SegmentationLabel:
-    def __init__(self, label_id, name=None, susceptibility=None):
+    def __init__(self, label_id, name=None, susceptibility=None, ct_number = None):
         self.label_id = label_id
         self.name = name
         self.susceptibility = susceptibility
+        self.ct_number = ct_number
     
     def set_name(self, name):
         self.name = name
