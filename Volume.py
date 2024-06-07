@@ -26,6 +26,16 @@ class Volume:
                 #label.set_name(name)
                 
     def create_segmentation_labels(self):
+        # The most important labels are:
+        # lungs Bone Soft Tissue SpinalCord CSF
+        # We can create a already pre-defined
+        self.set_label_name(76,"Spinal Cord")
+        # For the lungs we have [9,10,11,12,13]
+        for i in [9,10,11,12,13]:
+            self.set_label_name(i,'Lungs')
+            self.set_label_susceptibility(i,0.35)
+        # For the bones we have a lot more labels
+        # Vertebrae and ribs. But all of them can have the same value: -11.1
         for label_id in self.uniq_labels:
             self.segmentation_labels[label_id] = SegmentationLabel(label_id)
 
