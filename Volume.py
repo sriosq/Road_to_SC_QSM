@@ -1,18 +1,19 @@
 #Dependencies
 import numpy as np
 from label import SegmentationLabel
+import nibabel as nib
 
 class Volume:
     #establcer relacion volumen label
     
     def __init__(self, volume):
-        # we will recieve a 3D, so we will follow the convention of labeling for full body scans
-        # The 3D volume data will be a np array? or maybe it should be a nifti file, and then I can manually
-        # get_fdata?
+        # In this version we correct that the output should be the nifti image
+        # This way we can attribute the information from nifti files to the class
 
-        self.volume = volume
-        self.dimensions = np.array(volume.shape)
-        self.uniq_labels = np.unique(volume)
+        self.nifti = volume # This is now directing to a Nifti file
+        self.volume = self.nifti.get_fdata()
+        self.dimensions = np.array(self.volume.shape)
+        self.uniq_labels = np.unique(self.volume)
         self.segmentation_labels = {} 
         self.sus_dist = np.zeros(self.dimensions)
         # The dictionary has keys for every id number and each value 
@@ -139,16 +140,24 @@ class Volume:
                     label = self.segmentation_labels[pixel]
                     suscep = label.susceptibility
                     self.sus_dist[i,j,k] = suscep
+
         return self.sus_dist
 
+    def save_sus_dist_nii(self):
+        # Method to save the susceptibility distribution created to nifti
+        new_img = nib.Nifti1Image(self.sus_dist, affine=self.nifti.affine)
+
+        # Save the new NIfTI image to a file
+
+        nib.save(new_img,"sus_dist.nii.gz")
 
     def compute_Bz(self, res, buffer):
         #For later implementation
 
-        # res is resolution from the img heaer => pixdim
+        # res is resolution from the img header => pixdim
         # Buffer is an int to rescale kspace
 
-        matrix =np.array(self.volume.shape) # It is initally a tuple but it needs to be an array
+        matrix =np.array(self.volume.shape) # It is initially a tuple, but it needs to be an array
    
         # Creating k-space grid
         dim = buffer*matrix
@@ -167,7 +176,7 @@ class Volume:
         kernel = np.fft.fftshift(1/3 - kz**2/k2)
         kernel[0,0,0] = 1/3
 
-        FT_chi = np.fft.fftn(sus_dist, dim)
+        FT_chi = np.fft.fftn(self.sus_dist, dim)
         Bz_fft = kernel*FT_chi
 
         # retrive the inital FOV

@@ -1,6 +1,7 @@
 #Dependencies
 import numpy as np
 
+
 class SegmentationLabel:
     def __init__(self, label_id, name=None, susceptibility=None, ct_number = None):
         self.label_id = label_id
