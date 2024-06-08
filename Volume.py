@@ -4,7 +4,6 @@ from label import SegmentationLabel
 import nibabel as nib
 
 class Volume:
-    #establcer relacion volumen label
     
     def __init__(self, volume):
         # In this version we correct that the output should be the nifti image
@@ -12,7 +11,7 @@ class Volume:
 
         self.nifti = volume # This is now directing to a Nifti file
         self.volume = self.nifti.get_fdata()
-        self.dimensions = np.array(self.volume.shape)
+        self.dimensions = np.array(self.volume.shape) # It is initially a tuple, but it needs to be an array
         self.uniq_labels = np.unique(self.volume)
         self.segmentation_labels = {} 
         self.sus_dist = np.zeros(self.dimensions)
@@ -91,8 +90,6 @@ class Volume:
 
 
 
-
-
     def set_label_name(self, label_id, name):
 
         if label_id in self.uniq_labels:
@@ -118,7 +115,6 @@ class Volume:
         for i in range(len(self.uniq_labels)):
             name = input(f"Enter name for label #{i}: ") 
             label = SegmentationLabel(i, name)
-
 
 
     def show_labels(self):
@@ -151,13 +147,27 @@ class Volume:
 
         nib.save(new_img,"sus_dist.nii.gz")
 
+    # Implementation of the code to simulate MRI data acquisition
+
+
+
+
+
+
+
+
+
+
+
+
+    #This is a method that can be later tested but as of now, It should work just fine
     def compute_Bz(self, res, buffer):
         #For later implementation
 
         # res is resolution from the img header => pixdim
         # Buffer is an int to rescale kspace
 
-        matrix =np.array(self.volume.shape) # It is initially a tuple, but it needs to be an array
+        matrix = self.dimensions
    
         # Creating k-space grid
         dim = buffer*matrix
