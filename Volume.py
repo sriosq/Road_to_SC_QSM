@@ -136,7 +136,13 @@ class Volume:
                     pixel = self.volume[i,j,k]
                     label = self.segmentation_labels[pixel]
                     suscep = label.susceptibility
-                    self.sus_dist[i,j,k] = suscep
+                    if suscep == None:
+                        # THis means the label is not defined
+                        # The only not defined labels are organs
+                        # We can consider the suscp of water
+                        self.sus_dist[i,j,k] = -9.05
+                    else:
+                        self.sus_dist[i,j,k] = suscep
 
         return self.sus_dist
 
