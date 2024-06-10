@@ -8,7 +8,10 @@ class SegmentationLabel:
         self.name = name
         self.susceptibility = susceptibility
         self.ct_number = ct_number
-    
+        self.M0_val = None
+        self.T1_val = None
+        self.T2_val = None
+        
     def set_name(self, name):
         self.name = name
     

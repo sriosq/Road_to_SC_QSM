@@ -2,6 +2,7 @@
 import numpy as np
 from label import SegmentationLabel
 import nibabel as nib
+from simulation_functions import *
 
 class Volume:
     
@@ -149,10 +150,32 @@ class Volume:
 
     # Implementation of the code to simulate MRI data acquisition
 
+    def simulate_gre(self,TE,TR,theta,B0):
+        # Theta is a fixed angle // TE can be multiple echo time array or 1 echo time
+        # TR is the repetition time
 
+        B0_dir = [0, 0, 1]
+        voxel_size = self.nift.header['pixdim'][1:4] # Resolution - voxel size
 
+        D = create_dipole_kernel(B0_dir,voxel_size,self.dimensions)
 
+        # This variable is temporable and will later be deleted
+        chitemp = np.ones([2*d for d in self.dimensions]) *self.sus_dist[-1,-1,-1]
 
+        chitemp[:self.dimensions[0], :self.dimensions[1], :self.dimensions[2]] = self.sus_dist
+
+        fft_chitemp = np.fft.fftn(chitemp)
+
+        mult_result = fft_chitemp * D # Elementwise multiplication in freq. domain
+        field = np.real(np.fft.ifftn(mult_result))
+
+        field = field[:self.dimensions[0], :self.dimensions[1], :self.dimensions[2]]
+
+        del chitemp
+        del D
+
+        # To simulate the data acquisition we need to use the signal equation
+        # Given we have different labels, the M0 R1 and R2 values can be used from literature
 
 
 

@@ -6,7 +6,7 @@ import numpy as np
 def create_dipole_kernel(B0_dir, voxel_size,dimensions):
 
     B0_dir = np.array(B0_dir)
-    B0_dir = B0_dir / np.linalg(B0_dir)
+    B0_dir = B0_dir / np.linalg.norm(B0_dir)
 
     # Extract dimensions for each axis
     Nx, Ny, Nz = dimensions
