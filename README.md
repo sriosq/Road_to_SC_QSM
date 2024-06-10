@@ -25,7 +25,8 @@ Explain about the susceptibility selection criteria
 Explain about the susceptibility distribution creation > Acquisition simulation > Importance and applications
 
 
-
+Attribution to the data set link : https://creativecommons.org/licenses/by/4.0/ 
+It was used to pass through total segmentator CT and then used as template to label and create susceptibility distribution volume. Susceptibility distribution volume is used for simulating MRI acquistion.
 # References
 [1] Chan, K.-S., Marques, J.P., 2021. SEPIA—Susceptibility mapping 
 pipeline tool for phase images. Neuroimage 227, 117611.
