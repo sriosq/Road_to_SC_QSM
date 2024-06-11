@@ -2,7 +2,7 @@
 
 # Creating a dipole kernel
 import numpy as np
-
+import matplotlib.pyplot as plt
 def create_dipole_kernel(B0_dir, voxel_size,dimensions):
 
     B0_dir = np.array(B0_dir)
@@ -28,3 +28,8 @@ def create_dipole_kernel(B0_dir, voxel_size,dimensions):
 
     return dipole_kernel
 
+def show_slices(slices):
+   """ Function to display row of image slices """
+   fig, axes = plt.subplots(1, len(slices))
+   for i, slice in enumerate(slices):
+       axes[i].imshow(slice.T, cmap="gray", origin="lower")

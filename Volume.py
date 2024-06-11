@@ -34,7 +34,7 @@ class Volume:
         #
         # We can create an already pre-defined from convention of label_ids
 
-        # In TotalSegmentator this is labeld Spinal Cord but
+        # In TotalSegmentator this is labeled Spinal Cord, but
         # it really is the Spinal Canal = Spinal Cord + CSF
         self.set_label_name(76,"SpinalCanal")
         # For SC is (GM + WM)/2 = -9.055
@@ -43,7 +43,7 @@ class Volume:
 
         # For the lungs we have [9,10,11,12,13]
         for i in [9,10,11,12,13]:
-            self.set_label_name(i,'Lungs')
+            self.set_label_name(i,'lungs')
             self.set_label_susceptibility(i,0.35)
 
         # For the bones we have a lot more labels
@@ -52,11 +52,11 @@ class Volume:
         vertebra_list = np.arange(22,48)
         rib_list = np.append(np.arange(89,114),[68,69,70,71,74,75,88])
         for i in vertebra_list:
-            self.set_label_name(i,"Vertebrae")
+            self.set_label_name(i,"bone")
             self.set_label_susceptibility(i,-11.1)
 
         for i in rib_list:
-            self.set_label_name(i, "Bone")
+            self.set_label_name(i, "bone")
             self.set_label_susceptibility(i, -11.1)
 
         # Last but not least is to give susceptibility values to the organs
@@ -78,7 +78,7 @@ class Volume:
         # Soft tissue == water
         # Inside of body == fat
 
-        self.set_label_name(87, "Brain")
+
 
         self.set_label_name(0,'Air') # Outside of brain
         self.set_label_susceptibility(0,0.35)
@@ -86,8 +86,16 @@ class Volume:
         # If label has not been set it can be considered as fat
         # susceptibility of fat = -8.39
 
-        self.set_label_name(264,"Fat")
+        self.set_label_name(264,"fat")
         self.set_label_susceptibility(264,-8.39)
+
+        # For simulating GRE acquisition we need to set name of organs
+        # brain, liver, spleen, kidney
+        self.set_label_name(6, "pancreas")
+        self.set_label_name(87, "brain")
+        self.set_label_name(48,"heart")
+        self.set_label_name(1,"kidney")
+        self.set_label_name(2,"kidney")
 
 
 
@@ -182,6 +190,11 @@ class Volume:
 
         # To simulate the data acquisition we need to use the signal equation
         # Given we have different labels, the M0 R1 and R2 values can be used from literature
+
+        # We want to create a new volume
+        vol = np.zeros(self.dimensions)
+
+
 
 
 
