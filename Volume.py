@@ -156,7 +156,7 @@ class Volume:
 
     # Implementation of the code to simulate MRI data acquisition
 
-    def simulate_gre(self,TE,TR,theta,B0):
+    def simulate_gre_T1T2(self,TE,TR,theta,B0):
         # Theta is a fixed angle // TE can be multiple echo time array or 1 echo time
         # TR is the repetition time
 
@@ -186,6 +186,19 @@ class Volume:
 
 
 
+    def generate_signal(self,pd,T2star,FA,TE,deltaB0,gamma,handedness):
+        #FA : flip angle
+        #T2 star in seconds
+        #B0 in Tesla
+        # Gamma in rad*Hz/Tesla
+        # handedness => % Siemens & Canon = 'left', GE & Philips = 'right'
+
+        mag = np.zeros(self.dimensions)
+        phase = np.zeros(self.dimensions)
+
+
+
+        signal = pd*sind(FA)*exp(-TE./T2star-sign*1i*gamma*deltaB0*TE)
 
 
 
