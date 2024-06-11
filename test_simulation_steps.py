@@ -28,8 +28,8 @@ D = create_dipole_kernel(B0_dir, voxel_size, dim)
 #print("Dipole kernel shape:", D.shape)
 
 # Step 1: complete
-
-print(ct_wb_seg.header)
+show_slices(D)
+#print(ct_wb_seg.header)
 
 
 
