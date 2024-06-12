@@ -228,7 +228,7 @@ class Volume:
         del temp_img
     # This version of the code assumes that TR is long enough for all Longitudinal Magnetization to return
     # to its equilibrium value
-    def simulate_measurement(self,FA,TE):
+    def simulate_measurement(self,FA,TE,B0=3):
         #FA : flip angle
         #T2 star in seconds
         #B0 in Tesla
@@ -240,7 +240,7 @@ class Volume:
         newVol_dims.append(num_TE)
         # This way we can iterate over the last dimension (TEs)
         self.measurement = np.zeros(newVol_dims)
-        gamma = 267.52218744e6 # Using gamma for 3 Tesla
+        gamma = 267.52218744e6*3/B0# Using gamma for 3 Tesla, B0 is optional to change
         handedness = 'left'
 
         for te in range(num_TE):
