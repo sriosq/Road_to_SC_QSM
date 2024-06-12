@@ -3,7 +3,9 @@ import numpy as np
 from label import SegmentationLabel
 import nibabel as nib
 from simulation_functions import *
+import scipy.ndimage
 
+# Parent class for the creation of a non-finite biomechanical model of the body
 class Volume:
     
     def __init__(self, volume):
@@ -16,6 +18,8 @@ class Volume:
         self.uniq_labels = np.unique(self.volume)
         self.segmentation_labels = {} 
         self.sus_dist = np.zeros(self.dimensions)
+        self.pd_dist = np.zeros(self.dimensions)
+        self.dipole_kernel = None
         # The dictionary has keys for every id number and each value 
         # is the corresponding SegmentationLabel daughter class
 
@@ -36,9 +40,9 @@ class Volume:
 
         # In TotalSegmentator this is labeled Spinal Cord, but
         # it really is the Spinal Canal = Spinal Cord + CSF
-        self.set_label_name(76,"SpinalCanal")
         # For SC is (GM + WM)/2 = -9.055
         # From Eva's code GM = -9.03 and WM = -9.08
+        self.set_label_name(76,"SpinalCanal")
         self.set_label_susceptibility(76,-9.055)
 
         # For the lungs we have [9,10,11,12,13]
@@ -62,13 +66,20 @@ class Volume:
         # Last but not least is to give susceptibility values to the organs
         # and soft tissue => susceptibility value of water = -9.05
 
-        sus_water_list = [14, 15, 8, 7, 16]
+        sus_water_list = [1, 2, 3, 4, 5, 6, 7, 8, 14, 15, 16]
 
-        self.set_label_name(14, "Esophagus")
-        self.set_label_name(15, "Trachea")
-        self.set_label_name(7, "AdrenalGland")
-        self.set_label_name(8, "AdrenalGland")
-        self.set_label_name(16, "Thyroid Gland")
+        self.set_label_name(1, "spleen")
+        self.set_label_name(2, "kidney") #Right
+        self.set_label_name(3, "kidney") # Left
+        self.set_label_name(4, "organ") # Gallblader
+        self.set_label_name(5, "liver")
+        self.set_label_name(6, "organ") #Stomach
+        self.set_label_name(7, "gland") # AdrenalGland
+        self.set_label_name(8, "gland") # AdrenalGland
+        self.set_label_name(14, "esophagus")
+        self.set_label_name(15, "trachea")
+        self.set_label_name(16, "gland") # Thyroid
+
 
         # Susceptibility value of fat = -8.39
 
@@ -79,39 +90,79 @@ class Volume:
         # Inside of body == fat
 
 
-
-        self.set_label_name(0,'Air') # Outside of brain
+        self.set_label_name(0,"air") # Outside of brain
         self.set_label_susceptibility(0,0.35)
 
         # If label has not been set it can be considered as fat
-        # susceptibility of fat = -8.39
+        # susceptibility of fat label = (sus_fat + sus_muscle)/2 = -8.39 + -9.03 div2 = -8.71
 
         self.set_label_name(264,"fat")
-        self.set_label_susceptibility(264,-8.39)
+        self.set_label_susceptibility(264,-8.71)
 
         # For simulating GRE acquisition we need to set name of organs
         # brain, liver, spleen, kidney
-        self.set_label_name(6, "pancreas")
         self.set_label_name(87, "brain")
         self.set_label_name(48,"heart")
-        self.set_label_name(1,"kidney")
-        self.set_label_name(2,"kidney")
 
 
+        # The other labels missing without names follow
 
+        intestines = [17,18,19,20,21,22,23]
+        # small intestine duodenum colon urinary bladder prostate kidney cyst left and right
+        for i in intestines:
+            self.set_label_name(i,"organ")
+            self.set_label_susceptibility(i,-9.05)
+
+        # Lastly if everything was labeled properly what's left are veins and muscles
+        # The susceptibility of csf and water is -9.05, of muscle is -9.03 we can combine them
+        for i in self.uniq_labels:
+            if self.segmentation_labels[i].name == None:
+                self.set_label_name(i,"extra")
+                self.set_label_susceptibility(i,-9.04)
+
+        # This way we should have everything labeled
+    def check_labels(self):
+        for i in self.uniq_labels:
+            if self.segmentation_labels[i].name == None:
+                print("Label: ",self.segmentation_labels[i]["name"]," doesn't have name assigned")
+
+    def create_pd_vol(self):
+        # This method will use the lookup table of PD values to create a new volume
+        # This new volume will use the labels to quickly create a volume with ProtonDensity values
+
+        for i in range(self.dimensions[0]):
+            for j in range(self.dimensions[1]):
+                for k in range(self.dimensions[2]):
+
+                    pixel = self.volume[i,j,k]
+                    label = self.segmentation_labels[pixel]
+                    pd = label.PD_val
+                    if pd == None:
+                        # THis means the label does not have PD defined
+                        self.pd_dist[i,j,k] = 0
+                    else:
+                        # If the label has PD value it will put this value on the volume
+                        self.pd_dist[i,j,k] = pd
+        return self.pd_dist
     def set_label_name(self, label_id, name):
-
         if label_id in self.uniq_labels:
-
-
             self.segmentation_labels[label_id].set_name(name)
-        else:
-            print(f"Label ID {label_id} not found.")
+        else: print(f"Label ID {label_id} not found.")
 
     def set_label_susceptibility(self, label_id, susceptibility):
         if label_id in self.uniq_labels:
             # SImilar to set_label_name
             self.segmentation_labels[label_id].set_susceptibility(susceptibility)
+        else: print(f"Label ID {label_id} not found.")
+    def set_label_pd(self,label_id,pd):
+        if label_id in self.uniq_labels:
+            self.segmentation_labels[label_id].set_pd_val(pd)
+        else: print(f"Label ID {label_id} not found.")
+
+    def set_T2star(self, label_id, t2star):
+        if label_id in self.uniq_labels:
+        # SImilar to set_label_name
+            self.segmentation_labels[label_id].set_t2star_val(t2star)
         else:
             print(f"Label ID {label_id} not found.")
  
@@ -124,26 +175,24 @@ class Volume:
         for i in range(len(self.uniq_labels)):
             name = input(f"Enter name for label #{i}: ") 
             label = SegmentationLabel(i, name)
-
+            # Complete later for all attributes
 
     def show_labels(self):
         for i in range(len(self.uniq_labels)):
             print(i)
 
-    def __repr__(self):
-        return f"SegmentationLabelManager == Volume"
 
     def create_sus_dist(self):
-        
-        dimensions =np.array(self.volume.shape)
-
-        for i in range(dimensions[0]):
-            for j in range(dimensions[1]):
-                for k in range(dimensions[2]):
+        # Code for create a susceptibility distribution volume
+        # Using the label class
+        for i in range(self.dimensions[0]):
+            for j in range(self.dimensions[1]):
+                for k in range(self.dimensions[2]):
 
                     pixel = self.volume[i,j,k]
                     label = self.segmentation_labels[pixel]
                     suscep = label.susceptibility
+
                     if suscep == None:
                         # THis means the label is not defined
                         # The only not defined labels are organs
@@ -156,22 +205,101 @@ class Volume:
 
     def save_sus_dist_nii(self):
         # Method to save the susceptibility distribution created to nifti
-        new_img = nib.Nifti1Image(self.sus_dist, affine=self.nifti.affine)
-
+        temp_img = nib.Nifti1Image(self.sus_dist, affine=self.nifti.affine)
         # Save the new NIfTI image to a file
+        nib.save(temp_img,"sus_dist.nii.gz")
+        del temp_img
 
-        nib.save(new_img,"sus_dist.nii.gz")
+    def save_pd_dist(self):
+        # Method to save the proton density distribution created to nifti
+        temp_img = nib.Nifti1Image(self.pd_dist, affine=self.nifti.affine)
+        # Save the new NIfTI image to a file
+        nib.save(temp_img,"pd_dist.nii.gz")
+        del temp_img
+
+    def create_dipole_kernel(self,B0_dir =[0,0,1]):
+        voxel_size = self.nifti.header["pixdim"][1:4]
+        D = create_dipole_kernel(B0_dir,voxel_size,self.dimensions)
+        self.dipole_kernel = scipy.ndimage.convolve(self.sus_dist, D, mode='constant',cval=0.0)
+
+    def save_dipole_kernel(self):
+        temp_img = nib.Nifti1Image(self.dipole_kernel, affine=self.nifti.affine)
+        nib.save(temp_img,"dipole_kernel.nii.gz")
+        del temp_img
+    # This version of the code assumes that TR is long enough for all Longitudinal Magnetization to return
+    # to its equilibrium value
+    def simulate_measurement(self,FA,TE):
+        #FA : flip angle
+        #T2 star in seconds
+        #B0 in Tesla
+        # Gamma in rad*Hz/Tesla
+        # handedness => % Siemens & Canon = 'left', GE & Philips = 'right'
+        # TE should be a list, so we create a new volume
+        num_TE = len(TE)
+        newVol_dims = list(self.dimensions)
+        newVol_dims.append(num_TE)
+        # This way we can iterate over the last dimension (TEs)
+        self.measurement = np.zeros(newVol_dims)
+        gamma = 267.52218744e6 # Using gamma for 3 Tesla
+        handedness = 'left'
+
+        for te in range(num_TE):
+            for i in range(self.dimensions[0]):
+                for j in range(self.dimensions[1]):
+                    for k in range(self.dimensions[2]):
+
+                        pixel = self.volume[i,j,k]
+                        deltaB0 = self.dipole_kernel[i,j,k]
+                        label = self.segmentation_labels[pixel]
+                        pd = label.PD_val
+                        t2star = label.T2star_val
+                        signal = generate_signal(pd,t2star,FA,te,deltaB0,gamma,handedness)
+                        self.measurement[i,j,k,te] = signal
+
+        return self.measurement
+    # Line to implement from MATLAB
+    # signal = pd*sind(FA)*exp(-TE./T2star-sign*1i*gamma*deltaB0*TE)
+
+    def get_Magnitude(self):
+        self.magnitude = np.abs(self.measurement)
+        temp_img = nib.Nifti1Image(self.magnitude, affine=self.nifti.affine)
+        # Save the new NIfTI image to a file
+        nib.save(temp_img, "magnitude_simulated.nii.gz")
+        del temp_img
+
+    def get_Phase(self):
+        self.phase = np.angle(self.measurement)
+        temp_img = nib.Nifti1Image(self.phase, affine=self.nifti.affine)
+        # Save the new NIfTI image to a file
+        nib.save(temp_img, "phase_simulated.nii.gz")
+        del temp_img
+
+    def get_Real(self):
+        self.real = np.real(self.measurement)
+        temp_img = nib.Nifti1Image(self.real, affine=self.nifti.affine)
+        # Save the new NIfTI image to a file
+        nib.save(temp_img, "real_simulated.nii.gz")
+        del temp_img
+
+    def get_Imaginary(self):
+        self.imag = np.imag(self.measurement)
+        temp_img = nib.Nifti1Image(self.imag, affine=self.nifti.affine)
+        # Save the new NIfTI image to a file
+        nib.save(temp_img, "imaginary_simulated.nii.gz")
+        del temp_img
+
+
 
     # Implementation of the code to simulate MRI data acquisition
-
-    def simulate_gre_T1T2(self,TE,TR,theta,B0):
+    # This code is more complex as it assumes that there is still Longitudinal Magnetizatation
+    def simulate_signal_hard(self,TE,TR,theta,B0):
         # Theta is a fixed angle // TE can be multiple echo time array or 1 echo time
         # TR is the repetition time
 
         B0_dir = [0, 0, 1]
         voxel_size = self.nift.header['pixdim'][1:4] # Resolution - voxel size
 
-        D = create_dipole_kernel(B0_dir,voxel_size,self.dimensions)
+        # D = create_dipole_kernel(B0_dir,voxel_size,self.dimensions) # Now its an attribute
 
         # This variable is temporable and will later be deleted
         chitemp = np.ones([2*d for d in self.dimensions]) *self.sus_dist[-1,-1,-1]
@@ -180,13 +308,13 @@ class Volume:
 
         fft_chitemp = np.fft.fftn(chitemp)
 
-        mult_result = fft_chitemp * D # Elementwise multiplication in freq. domain
+        mult_result = fft_chitemp * self.dipole_kernel # Elementwise multiplication in freq. domain
         field = np.real(np.fft.ifftn(mult_result))
 
         field = field[:self.dimensions[0], :self.dimensions[1], :self.dimensions[2]]
 
         del chitemp
-        del D
+
 
         # To simulate the data acquisition we need to use the signal equation
         # Given we have different labels, the M0 R1 and R2 values can be used from literature
@@ -196,22 +324,6 @@ class Volume:
 
 
 
-
-
-
-    def generate_signal(self,pd,T2star,FA,TE,deltaB0,gamma,handedness):
-        #FA : flip angle
-        #T2 star in seconds
-        #B0 in Tesla
-        # Gamma in rad*Hz/Tesla
-        # handedness => % Siemens & Canon = 'left', GE & Philips = 'right'
-
-        mag = np.zeros(self.dimensions)
-        phase = np.zeros(self.dimensions)
-
-
-
-        signal = pd*sind(FA)*exp(-TE./T2star-sign*1i*gamma*deltaB0*TE)
 
 
 
@@ -251,4 +363,5 @@ class Volume:
 
 
 
-
+    def __repr__(self):
+        return f"SegmentationLabelManager == Volume"

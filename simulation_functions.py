@@ -3,6 +3,8 @@
 # Creating a dipole kernel
 import numpy as np
 import matplotlib.pyplot as plt
+import nibabel as nib
+
 def create_dipole_kernel(B0_dir, voxel_size,dimensions):
 
     B0_dir = np.array(B0_dir)
@@ -33,3 +35,20 @@ def show_slices(slices):
    fig, axes = plt.subplots(1, len(slices))
    for i, slice in enumerate(slices):
        axes[i].imshow(slice.T, cmap="gray", origin="lower")
+
+
+def generate_signal(pd, T2star, FA, TE, deltaB0, gamma, handedness):
+    # This code is for creating the volume dimensions with new dimension for each TE
+    if handedness == 'left':
+        sign = -1
+    elif handedness == 'right':
+        sign = 1
+    else:
+        raise ValueError("Invalid handedness value")
+    # Some regions of the volume have 0 as T2 star values so:
+    if T2star == 0:
+        signal = pd * np.sin(np.deg2rad(FA))
+    else:
+        signal = pd * np.sin(np.deg2rad(FA)) * np.exp(-TE / T2star - sign * 1j * gamma * deltaB0 * TE)
+
+    return signal
