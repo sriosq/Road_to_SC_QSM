@@ -44,6 +44,13 @@ class Volume:
         # From Eva's code GM = -9.03 and WM = -9.08
         self.set_label_name(76,"SpinalCanal")
         self.set_label_susceptibility(76,-9.055)
+        # IN this branch of the code, we have added labels for the SC
+        # We correct the fact that in Total Seg it was Spinal Canal
+        self.set_label_name(256, "spinal_cord")
+        self.set_label_susceptibility(256,-9.055)
+        self.set_label_name(289, "sc_csf")
+        self.set_label_susceptibility(289,-9.05)
+
 
         # For the lungs we have [9,10,11,12,13]
         for i in [9,10,11,12,13]:
@@ -219,8 +226,10 @@ class Volume:
 
     def create_dipole_kernel(self,B0_dir =[0,0,1]):
         voxel_size = self.nifti.header["pixdim"][1:4]
+
         D = create_dipole_kernel(B0_dir,voxel_size,self.dimensions)
-        self.dipole_kernel = scipy.ndimage.convolve(self.sus_dist, D, mode='constant',cval=0.0)
+
+        self.dipole_kernel = np.real(np.fft.ifftn(np.fft.fftn(self.sus_dist)*D))
 
     def save_dipole_kernel(self):
         temp_img = nib.Nifti1Image(self.dipole_kernel, affine=self.nifti.affine)

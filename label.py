@@ -21,7 +21,8 @@ class SegmentationLabel:
             "lungs": [None, 1270, None, 0, 0],  # Air in lungs doesn't have M0, T2 values?
             "water": [None, 2500, 2500, 1, 100],  # High M0 value
             "CSF": [None, 3200, 2000, 1, 100],  # High M0
-            "fat": [None, 380, 108, 0.035, 140], # T2star value : 0.5*70e-3
+            "sc_csf": [None, 3200, 2000, 1, 100],
+            "fat": [None, 380, 108, 0.035, 140], # T2star value : 0.5*70e-3 # Daniel PD=90
             "liver": [None, 809, 34, 34/2, 70],
             "spleen": [None, 1328, 61, 65/2, 80],
             # In this initial segmentation the whole brain will be considered 60% GM and 40% WM
