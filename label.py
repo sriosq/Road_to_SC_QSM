@@ -18,10 +18,14 @@ class SegmentationLabel:
         self.relax_values = {
             "air": [0, 0, 0, 0, 0],
             "bone": [None, 1204, 53, 3303, 117],  # M0 is often not specified for bone
-            "lungs": [None, 1270, None, 0, 0],  # Air in lungs doesn't have M0, T2 values?
+            "lungs": [None, 1270, None, 0.1, 0.1],  # Air in lungs doesn't have M0, T2 values?
             "water": [None, 2500, 2500, 1, 100],  # High M0 value
             "CSF": [None, 3200, 2000, 1, 100],  # High M0
-            "sc_csf": [None, 3200, 2000, 1, 100],
+
+            "spinal_cord":[None, None, None, 76, 59.5], # From the new label 256
+            # PD & T2* GM + WM / 2 =>  82 + 70 /2 =    , T2star = 66 + 53 / 2 =
+            "sc_csf": [None, 3200, 2000, 1, 100], # From the new label 289
+
             "fat": [None, 380, 108, 0.035, 140], # T2star value : 0.5*70e-3 # Daniel PD=90
             "liver": [None, 809, 34, 34/2, 70],
             "spleen": [None, 1328, 61, 65/2, 80],
