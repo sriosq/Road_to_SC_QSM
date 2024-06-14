@@ -19,7 +19,7 @@ class Volume:
         self.segmentation_labels = {} 
         self.sus_dist = np.zeros(self.dimensions)
         self.pd_dist = np.zeros(self.dimensions)
-        self.dipole_kernel = None
+        self.deltaB0 = np.zeros(self.dimensions)
         # The dictionary has keys for every id number and each value 
         # is the corresponding SegmentationLabel daughter class
 
@@ -224,15 +224,19 @@ class Volume:
         nib.save(temp_img,"pd_dist.nii.gz")
         del temp_img
 
-    def create_dipole_kernel(self,B0_dir =[0,0,1]):
+    def calculate_deltaB0(self,B0_dir =[0,0,1]):
+        
         voxel_size = self.nifti.header["pixdim"][1:4]
+        padded_dims = tuple(2*self.dimensions)
+        D = create_dipole_kernel(B0_dir,voxel_size,2*self.dimensions)
 
-        D = create_dipole_kernel(B0_dir,voxel_size,self.dimensions)
+        sus_dist_padded = np.zeros(padded_dims,dtype=np.float32)
+        sus_dist_padded[:self.dimensions[0], :self.dimensions[1], :self.dimensions[2]] = self.sus_dist
 
-        self.dipole_kernel = np.real(np.fft.ifftn(np.fft.fftn(self.sus_dist)*D))
+        self.deltaB0 = np.real(np.fft.ifftn(np.fft.fftn(sus_dist_padded)*D))
 
-    def save_dipole_kernel(self):
-        temp_img = nib.Nifti1Image(self.dipole_kernel, affine=self.nifti.affine)
+    def save_deltaB0(self):
+        temp_img = nib.Nifti1Image(self.deltaB0, affine=self.nifti.affine)
         nib.save(temp_img,"dipole_kernel.nii.gz")
         del temp_img
     # This version of the code assumes that TR is long enough for all Longitudinal Magnetization to return
@@ -258,12 +262,13 @@ class Volume:
                     for k in range(self.dimensions[2]):
 
                         pixel = self.volume[i,j,k]
-                        deltaB0 = self.dipole_kernel[i,j,k]
+                        deltaB0 = self.deltaB0[i,j,k]
                         label = self.segmentation_labels[pixel]
                         pd = label.PD_val
                         t2star = label.T2star_val
-                        signal = generate_signal(pd,t2star,FA,te,deltaB0,gamma,handedness)
-                        self.measurement[i,j,k,te] = signal
+                        mag,phase = generate_signal(pd,t2star,FA,te,deltaB0,gamma,handedness)
+                        self.magnitude[i,j,k,te] = mag
+                        self.phase[i,j,k,te] = phase
 
         return self.measurement
     # Line to implement from MATLAB
