@@ -19,7 +19,7 @@ class SegmentationLabel:
             "air": [0, 0, 0, 0, 0],
             "bone": [None, 1204, 53, 3303, 117],  # M0 is often not specified for bone
             "lungs": [None, 1270, None, 0, 0],  # Air in lungs doesn't have M0, T2 values?
-            "water": [None, 2500, 2500, 1, 100],  # High M0 value
+            "water": [None, 2500, 100, 1, 100],  # High M0 value
             "CSF": [None, 3200, 2000, 1, 100],  # High M0
             "sc_csf": [None, 3200, 2000, 1, 100],
             "fat": [None, 380, 108, 0.035, 140], # T2star value : 0.5*70e-3 # Daniel PD=90

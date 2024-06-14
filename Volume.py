@@ -227,7 +227,7 @@ class Volume:
     def create_dipole_kernel(self,B0_dir =[0,0,1]):
         voxel_size = self.nifti.header["pixdim"][1:4]
 
-        D = create_dipole_kernel(B0_dir,voxel_size,self.dimensions)
+        D = create_dipole_kernel(B0_dir,voxel_size,2*self.dimensions)
 
         self.dipole_kernel = np.real(np.fft.ifftn(np.fft.fftn(self.sus_dist)*D))
 
