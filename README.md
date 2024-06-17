@@ -1,3 +1,5 @@
+# <div align="center">**Simulating MRI**</div>
+
 # Susceptibility Phantom of the Spinal Cord
 Repository for the Brainhack project - summer 2024
 
@@ -29,6 +31,6 @@ Attribution to the data set link : https://creativecommons.org/licenses/by/4.0/
 It was used to pass through total segmentator CT and then used as template to label and create susceptibility distribution volume. Susceptibility distribution volume is used for simulating MRI acquistion.
 # References
 [1] Chan, K.-S., Marques, J.P., 2021. SEPIA—Susceptibility mapping 
-pipeline tool for phase images. Neuroimage 227, 117611.
-[2] Gatidis, S., Hepp, T., Früh, M. et al. A whole-body FDG-PET/CT Dataset with manually annotated Tumor Lesions. Sci Data 9, 601 (2022). https://doi.org/10.1038/s41597-022-01718-3
-[3] Wasserthal, J., Breit, H.-C., Meyer, M.T., Pradella, M., Hinck, D., Sauter, A.W., Heye, T., Boll, D., Cyriac, J., Yang, S., Bach, M., Segeroth, M., 2023. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiology: Artificial Intelligence. https://doi.org/10.1148/ryai.230024
+pipeline tool for phase images. Neuroimage 227, 117611. </br>
+[2] Gatidis, S., Hepp, T., Früh, M. et al. A whole-body FDG-PET/CT Dataset with manually annotated Tumor Lesions. Sci Data 9, 601 (2022). https://doi.org/10.1038/s41597-022-01718-3 </br>
+[3] Wasserthal, J., Breit, H.-C., Meyer, M.T., Pradella, M., Hinck, D., Sauter, A.W., Heye, T., Boll, D., Cyriac, J., Yang, S., Bach, M., Segeroth, M., 2023. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiology: Artificial Intelligence. https://doi.org/10.1148/ryai.230024 </br>
