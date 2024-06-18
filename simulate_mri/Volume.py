@@ -5,6 +5,7 @@ import nibabel as nib
 from simulate_mri import *
 from utils.simulation_functions import *
 import scipy.ndimage
+from utils.get_dic_values import *
 
 # Parent class for the creation of a non-finite biomechanical model of the body
 class Volume:
@@ -380,6 +381,23 @@ class Volume:
         volume_without_buff = volume_buffed[0:matrix[0], 0:matrix[1], 0:matrix[2]]
 
 
+    def save_sus_csv(self):
+        data = []
+        for i in self.segmentation_labels.keys():
+            label = self.segmentation_labels[i]
+            if label.name is not None and label.susceptibility is not None and label.name not in data[1]:
+                # The last is to get unique names 
+                data.append({"Label ID": label.label_id,
+                    "Name": label.name,
+                    "Susceptibility": label.susceptibility})
+        # Call funtion that creates CSV
+        to_csv_sus(data,"susceptibility_values.csv")
+
+    def save_relax_csv(self):
+        # Further implementation to go through self.relax values of each label?
+        # Think about a more efficient way because the user should be able to change the values
+        # It might be usefull to get this inputs from different researchers and testing
+        pass
 
     def __repr__(self):
         return f"SegmentationLabelManager == Volume"
