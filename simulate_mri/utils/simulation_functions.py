@@ -11,12 +11,13 @@ def create_dipole_kernel(B0_dir, voxel_size,dimensions):
     B0_dir = B0_dir / np.linalg.norm(B0_dir)
 
     # Extract dimensions for each axis
-    Nx, Ny, Nz = dimensions
+    Nx, Ny, Nz = 2*dimensions
 
     # Generate the frequenc grid
-    kx = np.fft.fftfreq(Nx, voxel_size[0])
-    ky = np.fft.fftfreq(Ny, voxel_size[1])
-    kz = np.fft.fftfreq(Nz, voxel_size[2])
+    kx = np.fft.fftfreq(Nx, voxel_size[0]).astype(np.float32)
+    ky = np.fft.fftfreq(Ny, voxel_size[1]).astype(np.float32)
+    kz = np.fft.fftfreq(Nz, voxel_size[2]).astype(np.float32)
+
     kx, ky, kz = np.meshgrid(kx, ky, kz, indexing='ij')
 
     k_dot_B0 = kx * B0_dir[0] + ky * B0_dir[1] + kz * B0_dir[2]
@@ -46,9 +47,11 @@ def generate_signal(pd, T2star, FA, TE, deltaB0, gamma, handedness):
     else:
         raise ValueError("Invalid handedness value")
     # Some regions of the volume have 0 as T2 star values so:
-    if T2star == 0:
+    #if T2star == 0:
         signal = pd * np.sin(np.deg2rad(FA))
-    else:
-        signal = pd * np.sin(np.deg2rad(FA)) * np.exp(-TE / T2star - sign * 1j * gamma * deltaB0 * TE)
+    #else:
+    signal = pd * np.sin(np.deg2rad(FA)) * np.exp(-TE / T2star - sign * 1j * gamma * deltaB0 * TE)
+    mag = np.abs(signal)
+    phase = np.angle(signal)
 
-    return signal
+    return mag,phase

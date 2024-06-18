@@ -2,8 +2,10 @@
 import numpy as np
 from label import SegmentationLabel
 import nibabel as nib
-from simulation_functions import *
+from simulate_mri import *
+from utils.simulation_functions import *
 import scipy.ndimage
+from utils.get_dic_values import *
 
 # Parent class for the creation of a non-finite biomechanical model of the body
 class Volume:
@@ -19,7 +21,10 @@ class Volume:
         self.segmentation_labels = {} 
         self.sus_dist = np.zeros(self.dimensions)
         self.pd_dist = np.zeros(self.dimensions)
-        self.dipole_kernel = None
+        self.deltaB0 = np.zeros(self.dimensions)
+
+        self.magnitude = np.zeros(self.dimensions)
+        self.phase = np.zeros(self.dimensions)
         # The dictionary has keys for every id number and each value 
         # is the corresponding SegmentationLabel daughter class
 
@@ -224,15 +229,19 @@ class Volume:
         nib.save(temp_img,"pd_dist.nii.gz")
         del temp_img
 
-    def create_dipole_kernel(self,B0_dir =[0,0,1]):
+    def calculate_deltaB0(self,B0_dir =[0,0,1]):
+
         voxel_size = self.nifti.header["pixdim"][1:4]
+        padded_dims = tuple(2*self.dimensions)
+        D = create_dipole_kernel(B0_dir,voxel_size,self.dimensions)
 
-        D = create_dipole_kernel(B0_dir,voxel_size,2*self.dimensions)
+        sus_dist_padded = np.zeros(padded_dims,dtype=np.float32)
+        sus_dist_padded[:self.dimensions[0], :self.dimensions[1], :self.dimensions[2]] = self.sus_dist
 
-        self.dipole_kernel = np.real(np.fft.ifftn(np.fft.fftn(self.sus_dist)*D))
+        self.deltaB0 = np.real(np.fft.ifftn(np.fft.fftn(sus_dist_padded)*D))
 
-    def save_dipole_kernel(self):
-        temp_img = nib.Nifti1Image(self.dipole_kernel, affine=self.nifti.affine)
+    def save_deltaB0(self):
+        temp_img = nib.Nifti1Image(self.deltaB0, affine=self.nifti.affine)
         nib.save(temp_img,"dipole_kernel.nii.gz")
         del temp_img
     # This version of the code assumes that TR is long enough for all Longitudinal Magnetization to return
@@ -258,12 +267,13 @@ class Volume:
                     for k in range(self.dimensions[2]):
 
                         pixel = self.volume[i,j,k]
-                        deltaB0 = self.dipole_kernel[i,j,k]
+                        deltaB0 = self.deltaB0[i,j,k]
                         label = self.segmentation_labels[pixel]
                         pd = label.PD_val
                         t2star = label.T2star_val
-                        signal = generate_signal(pd,t2star,FA,te,deltaB0,gamma,handedness)
-                        self.measurement[i,j,k,te] = signal
+                        mag,phase = generate_signal(pd,t2star,FA,te,deltaB0,gamma,handedness)
+                        self.magnitude[i,j,k,te] = mag
+                        self.phase[i,j,k,te] = phase
 
         return self.measurement
     # Line to implement from MATLAB
@@ -371,6 +381,23 @@ class Volume:
         volume_without_buff = volume_buffed[0:matrix[0], 0:matrix[1], 0:matrix[2]]
 
 
+    def save_sus_csv(self):
+        data = []
+        for i in self.segmentation_labels.keys():
+            label = self.segmentation_labels[i]
+            if label.name is not None and label.susceptibility is not None and label.name not in data[1]:
+                # The last is to get unique names 
+                data.append({"Label ID": label.label_id,
+                    "Name": label.name,
+                    "Susceptibility": label.susceptibility})
+        # Call funtion that creates CSV
+        to_csv_sus(data,"susceptibility_values.csv")
+
+    def save_relax_csv(self):
+        # Further implementation to go through self.relax values of each label?
+        # Think about a more efficient way because the user should be able to change the values
+        # It might be usefull to get this inputs from different researchers and testing
+        pass
 
     def __repr__(self):
         return f"SegmentationLabelManager == Volume"

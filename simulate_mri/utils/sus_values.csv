@@ -1,0 +1,17 @@
+Name,Susceptibility
+air,0.35
+spleen,-9.05
+kidney,-9.05
+organ,-9.05
+liver,-9.05
+gland,-9.05
+lungs,0.35
+esophagus,-9.05
+trachea,-9.05
+bone,-11.1
+heart,-9.055
+SpinalCanal,-9.055
+brain,-9.055
+spinal_cord,-9.055
+fat,-8.71
+sc_csf,-9.05
