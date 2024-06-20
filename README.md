@@ -24,7 +24,7 @@ We used object oriented python programming to create 2 classes. The first class 
 
 An interactive jupyter notebook is provided [here](interactive.ipynb) with comments and an example workflow to understand how the code works and how to use the different implemented methods as the code from this repository is not limited to the usage of the example Nifti file used. It will work with any Nifti file that is an output of Total Segmentator. 
 
-A parcellation color map is provided that can be used with ITK-snap in the file [here](parcellation_itk.txt). This file encodes labels 1 to 48 with a name according to the label name it will have once the code is ran, labels 49 to 67, 72, 73, 77 to 86 are named extra as they don't have a fixed name under the label class.
+A parcellation color map is provided that can be used with ITK-snap in the file [here](parcellation_itk.txt). This file encodes labels 1 to 48 with a name according to the label name it will have once the code is ran, labels 49 to 67, 72, 73, 77 to 86 are named extra as they don't have a fixed name under the label class. An example of the final output is shown below.
 
 ![image](https://github.com/sriosq/brainhack_project/assets/154398382/36e16ab6-0683-4455-bec4-4337bb7bb975)
 
