@@ -4,7 +4,7 @@
 
 # Theory 
 
-Quantitative Susceptibility Mapping (QSM) is a group of experimental methods that seeks in providing a MR image whose contrast is given by the magnetic suscpetibility of the voxel. Magnetic susceptibility, chi (\chi) is the measure of how readily a particle will get magnetized to a external magnetic field. If the particle feels attracted to the field it is said to have a paramagnetic behaviour whereas if it feels repelled to it, it possesses diamagnetic behaviour. There is a third state: Ferromagnetism, but this behaviour is not present in the human body and therefore not quantified for this work.
+Quantitative Susceptibility Mapping (QSM) is a group of experimental methods that seeks in providing a MR image whose contrast is given by the magnetic suscpetibility of the voxel. Magnetic susceptibility, chi ($$\chi$$) is the measure of how readily a particle will get magnetized to a external magnetic field. If the particle feels attracted to the field it is said to have a paramagnetic behaviour whereas if it feels repelled to it, it possesses diamagnetic behaviour. There is a third state: Ferromagnetism, but this behaviour is not present in the human body and therefore not quantified for this work.
 
 QSM can be split into image acquisition, image processing and analysis elements [4]. The research focus varies depending of the section of interest. Image acquisition comprises pulse sequences & protocol as well as coil combination, saving and exporting of the data. The processing section is a post-processing pipeline that uses phase information, it begins with Phase Unwrapping and Echo Combination, Mask creation, Background Field Removal and finally Dipole Inversion. 
 
@@ -23,16 +23,22 @@ We used object oriented python programming to create 2 classes. The first class 
 
 An interactive jupyter notebook is provided with comments and an example workflow to understand how the code works and how to use the different implemented methods as the code from this repository is not limited to the usage of the example Nifti file used. It will work with any Nifti file that is an output of Total Segmentator. 
 
-# Folder description
+A parcellation color map is provided that can be used with ITK-snap in the file [here](parcellation_itk.txt). This file encodes labels 1 to 48 with a name according to the label name it will have once the code is ran, labels 49 to 67, 72, 73, 77 to 86 are named extra as they don't have a fixed name under the label class.
+
+# Folder Structure
 
 Inside the data folder you will find a raw data folder with the example output of Total Segmentator when using the aforementioned dataset as well as a file containing the relaxation times selected for the assignment on the labels.
  
-In the post processing folder you will find a file that is used to recover the body's fat and shape as total segmentator will loose the soft tissue that is arround the organs and that is also limiting the body from the outside. There are also 3 other files: final_total_seg is the file that takes into account the fat and muscle inside the body, new_sc_label file addresses the issue that Total Segmentator will not segment the CSF surrounding the spinal cord and will label as spinal cord the region of the body that is really the Spinal canal and final_sc_seg is the file that introduces 2 new labels to the segmentation: SC_CSF for the cerobrospinal fluid surrounding the spinal cord and Spinal Cord. In order to create this labels, the CT Nifti file was registered to the PAM50 template [5] using Spinal Cord Toolbox [6]. 
+In the post processing folder you will find a file that is used to recover the body's fat and shape as total segmentator will loose the soft tissue that is arround the organs and that is also limiting the body from the outside. There are also 3 other files: final_total_seg is the file that takes into account the fat and muscle inside the body, new_sc_label file addresses the issue that Total Segmentator will not segment the CSF surrounding the spinal cord and will label as spinal cord the region of the body that is really the Spinal canal and final_sc_seg is the file that introduces 2 new labels to the segmentation: SC_CSF for the cerobrospinal fluid surrounding the spinal cord and Spinal Cord. In order to create this labels, the CT Nifti file was registered to the PAM50 template [5] using Spinal Cord Toolbox [6]. All the necessary files for adding a new label to the segmentation are inside the reslicing folder. This opens an interesting feature: one can add as many labels as desired. When creating and adding a new label it is imperative to select a number greater than 120 so that the label doesn't overlap with the already existing labels from total segmentation. 
 
+The code is inside the simulate_mri folder. The Volume.py file contains the parent class that creates the labels by calling the SegmentationLabel class inside the label.py file. The interactive jupyter notebook will show the usefull methods integrated in the class.
 
-Explain about the way the classes work
+# Data Simulation
 
-Explain about the susceptibility selection criteria
+The susceptibility distribution phantom (sus_dist.nii.gz) can be used for simulating GRE data acquisition. In the first iteration of the code it is using the following equation:
+
+$$ \text{protonDensity} \cdot \sin(\text{FA}) \cdot \exp\left(-\frac{TE}{T2^*} - \text{sign} \cdot i \cdot \gamma \cdot \delta B_0 \cdot TE\right) $$
+
 
 Explain about the susceptibility distribution creation > Acquisition simulation > Importance and applications
 
