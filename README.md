@@ -4,7 +4,7 @@
 
 # Theory 
 
-Quantitative Susceptibility Mapping (QSM) is a group of experimental methods that seeks in providing a MR image whose contrast is given by the magnetic suscpetibility of the voxel. Magnetic susceptibility, chi ($$\chi$$) is the measure of how readily a particle will get magnetized to a external magnetic field. If the particle feels attracted to the field it is said to have a paramagnetic behaviour whereas if it feels repelled to it, it possesses diamagnetic behaviour. There is a third state: Ferromagnetism, but this behaviour is not present in the human body and therefore not quantified for this work.
+Quantitative Susceptibility Mapping (QSM) is a group of experimental methods that seeks in providing a MR image whose contrast is given by the magnetic suscpetibility of the voxel. Magnetic susceptibility, chi ($\chi$) is the measure of how readily a particle will get magnetized to a external magnetic field. If the particle feels attracted to the field it is said to have a paramagnetic behaviour whereas if it feels repelled to it, it possesses diamagnetic behaviour. There is a third state: Ferromagnetism, but this behaviour is not present in the human body and therefore not quantified for this work.
 
 QSM can be split into image acquisition, image processing and analysis elements [4]. The research focus varies depending of the section of interest. Image acquisition comprises pulse sequences & protocol as well as coil combination, saving and exporting of the data. The processing section is a post-processing pipeline that uses phase information, it begins with Phase Unwrapping and Echo Combination, Mask creation, Background Field Removal and finally Dipole Inversion. 
 
@@ -38,6 +38,8 @@ The code is inside the simulate_mri folder. The Volume.py file contains the pare
 The susceptibility distribution phantom (sus_dist.nii.gz) can be used for simulating GRE data acquisition. In the first iteration of the code it is using the following equation:
 
 $$ \text{protonDensity} \cdot \sin(\text{FA}) \cdot \exp\left(-\frac{TE}{T2^*} - \text{sign} \cdot i \cdot \gamma \cdot \delta B_0 \cdot TE\right) $$
+
+From this equation $$\delta B_0$$ is the convolution of the dipole kernel with the susceptibility distribution created earlier.
 
 
 Explain about the susceptibility distribution creation > Acquisition simulation > Importance and applications
