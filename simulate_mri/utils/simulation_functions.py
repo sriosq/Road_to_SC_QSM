@@ -48,7 +48,7 @@ def generate_signal(pd, T2star, FA, TE, deltaB0, gamma, handedness):
         raise ValueError("Invalid handedness value")
     # Some regions of the volume have 0 as T2 star values so:
     #if T2star == 0:
-        signal = pd * np.sin(np.deg2rad(FA))
+    #    signal = pd * np.sin(np.deg2rad(FA))
     #else:
     signal = pd * np.sin(np.deg2rad(FA)) * np.exp(-TE / T2star - sign * 1j * gamma * deltaB0 * TE)
     mag = np.abs(signal)

@@ -1,11 +1,11 @@
 #Dependencies
 import numpy as np
-from label import SegmentationLabel
+from simulate_mri.label import SegmentationLabel
 import nibabel as nib
 from simulate_mri import *
-from utils.simulation_functions import *
+from simulate_mri.utils.simulation_functions import create_dipole_kernel, generate_signal, show_slices
 import scipy.ndimage
-from utils.get_dic_values import *
+from simulate_mri.utils.get_dic_values import to_csv_sus, to_csv_relax
 
 # Parent class for the creation of a non-finite biomechanical model of the body
 class Volume:
@@ -179,7 +179,7 @@ class Volume:
             print(f"Label ID {label_id} not found.")
  
     def display(self):
-        pass
+        show_slices(self.volume)
 
 
     def manual_labeling(self):
@@ -219,14 +219,14 @@ class Volume:
         # Method to save the susceptibility distribution created to nifti
         temp_img = nib.Nifti1Image(self.sus_dist, affine=self.nifti.affine)
         # Save the new NIfTI image to a file
-        nib.save(temp_img,"sus_dist.nii.gz")
+        nib.save(temp_img,"output/sus_dist.nii.gz")
         del temp_img
 
     def save_pd_dist(self):
         # Method to save the proton density distribution created to nifti
         temp_img = nib.Nifti1Image(self.pd_dist, affine=self.nifti.affine)
         # Save the new NIfTI image to a file
-        nib.save(temp_img,"pd_dist.nii.gz")
+        nib.save(temp_img,"output/pd_dist.nii.gz")
         del temp_img
 
     def calculate_deltaB0(self,B0_dir =[0,0,1]):
@@ -242,7 +242,7 @@ class Volume:
 
     def save_deltaB0(self):
         temp_img = nib.Nifti1Image(self.deltaB0, affine=self.nifti.affine)
-        nib.save(temp_img,"dipole_kernel.nii.gz")
+        nib.save(temp_img,"output/freq_map.nii.gz")
         del temp_img
     # This version of the code assumes that TR is long enough for all Longitudinal Magnetization to return
     # to its equilibrium value
@@ -283,28 +283,28 @@ class Volume:
         self.magnitude = np.abs(self.measurement)
         temp_img = nib.Nifti1Image(self.magnitude, affine=self.nifti.affine)
         # Save the new NIfTI image to a file
-        nib.save(temp_img, "magnitude_simulated.nii.gz")
+        nib.save(temp_img, "simulation/magnitude.nii.gz")
         del temp_img
 
     def get_Phase(self):
         self.phase = np.angle(self.measurement)
         temp_img = nib.Nifti1Image(self.phase, affine=self.nifti.affine)
         # Save the new NIfTI image to a file
-        nib.save(temp_img, "phase_simulated.nii.gz")
+        nib.save(temp_img, "simulation/phase.nii.gz")
         del temp_img
 
     def get_Real(self):
         self.real = np.real(self.measurement)
         temp_img = nib.Nifti1Image(self.real, affine=self.nifti.affine)
         # Save the new NIfTI image to a file
-        nib.save(temp_img, "real_simulated.nii.gz")
+        nib.save(temp_img, "simulation/real.nii.gz")
         del temp_img
 
     def get_Imaginary(self):
         self.imag = np.imag(self.measurement)
         temp_img = nib.Nifti1Image(self.imag, affine=self.nifti.affine)
         # Save the new NIfTI image to a file
-        nib.save(temp_img, "imaginary_simulated.nii.gz")
+        nib.save(temp_img, "simulation/imaginary.nii.gz")
         del temp_img
 
 
@@ -391,7 +391,7 @@ class Volume:
                     "Name": label.name,
                     "Susceptibility": label.susceptibility})
         # Call funtion that creates CSV
-        to_csv_sus(data,"susceptibility_values.csv")
+        to_csv_sus(data,"data/susceptibility_values.csv")
 
     def save_relax_csv(self):
         # Further implementation to go through self.relax values of each label?
