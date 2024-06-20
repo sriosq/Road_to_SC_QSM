@@ -1,5 +1,0 @@
-This is the log for the OG Pipeline
-
-####### 
-
-Fieldmap is
