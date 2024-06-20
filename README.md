@@ -39,7 +39,7 @@ $$ \text{protonDensity} \cdot \sin(\text{FA}) \cdot \exp\left(-\frac{TE}{T2^*} -
 
 The equation is a shorter modified version of the code from the QSM reconstruction challenge 2.0 [7] which assumes sufficient time in between acquisitions (TR) for the longitudinal magnetization to recover to its equilibrium value.
 
-From this equation $\delta B_0$ is the convolution of the dipole kernel with the susceptibility distribution created earlier.
+From this equation ($\delta B_0$) is the convolution of the dipole kernel with the susceptibility distribution created earlier.
 
 The code is able to simulate multiple echoes, after the simulation the magnitude and phase can be saved with the appropriate methods.
 
