@@ -1,6 +1,12 @@
 # <div align="center">**On the road to QSM of Spinal Cord**</div>
 
-# Theory 
+# About me
+
+<img src="https://github.com/sriosq/brainhack_project/assets/154398382/bd3f527b-5a37-43c0-84c3-9388cb66fca6" width="150" />
+
+Hello! My name is Sebastian Rios. I have a background in Biomedical Engineering and I recently started a MSc at the NeuroPoly Lab in Montreal. The project you will find in this repository is a stepping stone in the search for Quantitative Susceptibility Mapping of the Spinal Cord.
+
+# Context 
 
 Quantitative Susceptibility Mapping (QSM) is a group of experimental methods that seeks in providing a MR image whose contrast is given by the magnetic suscpetibility of the voxel. Magnetic susceptibility, chi ($\chi$) is the measure of how readily a particle will get magnetized to a external magnetic field. If the particle feels attracted to the field it is said to have a paramagnetic behaviour whereas if it feels repelled to it, it possesses diamagnetic behaviour. There is a third state: Ferromagnetism, but this behaviour is not present in the human body and therefore not quantified for this work.
 
@@ -11,6 +17,19 @@ QSM can be split into image acquisition, image processing and analysis elements 
 # Motivation
 
 QSM is a very powerfull tool for non-invasive characterization of iron deposition, estimating voxel oxygenation and geometry, differentiating blood and calcium products as well as studying demnyelinating lesions in white matter. But QSM is still a novel technique, Ithe International Society for Magnetic Resonance in Medicin (ISMRM) has recently published recommendations for implementing QSM for clinical research [4], but it is currently limted to brain analysis. Moreover, most of the parameters used throughout the processing pipeline for QSM have been adjusted for brain images, which underscores the necessity for extending such studies. Here at the NeuroPoly lab in Montreal, one of our primary research focusis is the spinal cord. The motivitation behind this repository is to address the need for extending QSM studies to the spinal cord. In order to perform QSM of the spinal cord, we require a ground truth; therefore the focus is to develop a susceptibility distribution phantom for validating synthetic MRI acquisition. Simulating MRI acquisition will provide means to optimize acquisition parameters for QSM processing pipelines.
+
+# Objectives
+
+* Acquire a labeled whole body from publicly available Datasets
+* Create a susceptibility distribution volume using the labels
+* Simulate MRI acquisition with the possibility of selecting different parameters
+
+# Tools
+
+* Git and GitHub for version control of the code and documentation
+* ITKsnap and FSLeyes for image analysis, label editing and mask creation
+* Jupyter notebook for creating an interactive example for using the code
+* Python, highlighting Nibabel and Numpy libraries
 
 # Phantom Creation
 
