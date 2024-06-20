@@ -1,7 +1,5 @@
 # <div align="center">**On the road to QSM of Spinal Cord**</div>
 
-
-
 # Theory 
 
 Quantitative Susceptibility Mapping (QSM) is a group of experimental methods that seeks in providing a MR image whose contrast is given by the magnetic suscpetibility of the voxel. Magnetic susceptibility, chi ($\chi$) is the measure of how readily a particle will get magnetized to a external magnetic field. If the particle feels attracted to the field it is said to have a paramagnetic behaviour whereas if it feels repelled to it, it possesses diamagnetic behaviour. There is a third state: Ferromagnetism, but this behaviour is not present in the human body and therefore not quantified for this work.
@@ -39,25 +37,20 @@ The susceptibility distribution phantom (sus_dist.nii.gz) can be used for simula
 
 $$ \text{protonDensity} \cdot \sin(\text{FA}) \cdot \exp\left(-\frac{TE}{T2^*} - \text{sign} \cdot i \cdot \gamma \cdot \delta B_0 \cdot TE\right) $$
 
-From this equation $$\delta B_0$$ is the convolution of the dipole kernel with the susceptibility distribution created earlier.
+The equation is a shorter modified version of the code from the QSM reconstruction challenge 2.0 [7] which assumes sufficient time in between acquisitions (TR) for the longitudinal magnetization to recover to its equilibrium value.
+
+From this equation $\delta B_0$ is the convolution of the dipole kernel with the susceptibility distribution created earlier.
+
+The code is able to simulate multiple echoes, after the simulation the magnitude and phase can be saved with the appropriate methods.
 
 
-Explain about the susceptibility distribution creation > Acquisition simulation > Importance and applications
 
-
-
-For the parcellation color map:
-From Label id 1 to 48 everything has a name. 
-Then from 49 to 67 everything is automatically labeled "extra"; 72, 73, from 77 to 86 also
-
-
-Attribution to the data set link : https://creativecommons.org/licenses/by/4.0/ 
-It was used to pass through total segmentator CT and then used as template to label and create susceptibility distribution volume. Susceptibility distribution volume is used for simulating MRI acquistion.
 # References
 [1] Chan, K.-S., Marques, J.P., 2021. SEPIA—Susceptibility mapping 
 pipeline tool for phase images. Neuroimage 227, 117611. </br>
-[2] Gatidis, S., Hepp, T., Früh, M. et al. A whole-body FDG-PET/CT Dataset with manually annotated Tumor Lesions. Sci Data 9, 601 (2022). https://doi.org/10.1038/s41597-022-01718-3 </br>
+[2] Gatidis, S., Hepp, T., Früh, M. et al. A whole-body FDG-PET/CT Dataset with manually annotated Tumor Lesions. Sci Data 9, 601 (2022). https://doi.org/10.1038/s41597-022-01718-3 || Attribution to the data set link : https://creativecommons.org/licenses/by/4.0/ </br>
 [3] Wasserthal, J., Breit, H.-C., Meyer, M.T., Pradella, M., Hinck, D., Sauter, A.W., Heye, T., Boll, D., Cyriac, J., Yang, S., Bach, M., Segeroth, M., 2023. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiology: Artificial Intelligence. https://doi.org/10.1148/ryai.230024 </br>
 [4] QSM Consensus Organization Committee; Bilgic B, Costagli M, Chan KS, Duyn J, Langkammer C, Lee J, Li X, Liu C, Marques JP, Milovic C, Robinson S, Schweser F, Shmueli K, Spincemaille P, Straub S, van Zijl P, Wang Y; ISMRM Electro-Magnetic Tissue Properties Study Group. Recommended Implementation of Quantitative Susceptibility Mapping for Clinical Research in The Brain: A Consensus of the ISMRM Electro-Magnetic Tissue Properties Study Group. ArXiv [Preprint]. 2023 Jul 5:arXiv:2307.02306v1. Update in: Magn Reson Med. 2024 May;91(5):1834-1862. doi: 10.1002/mrm.30006. PMID: 37461418; PMCID: PMC10350101.
-[5] Benjamin De Leener, Vladimir S. Fonov, D. Louis Collins, Virginie Callot, Nikola Stikov, Julien Cohen-Adad, PAM50: Unbiased multimodal template of the brainstem and spinal cord aligned with the ICBM152 space, NeuroImage, Volume 165, 2018, Pages 170-179, ISSN 1053-8119, https://doi.org/10.1016/j.neuroimage.2017.10.041.
-[6] De Leener B, Levy S, Dupont SM, Fonov VS, Stikov N, Louis Collins D, Callot V, Cohen-Adad J. SCT: Spinal Cord Toolbox, an open-source software for processing spinal cord MRI data. Neuroimage 2017. https://spinalcordtoolbox.com/index.html
+[5] Benjamin De Leener, Vladimir S. Fonov, D. Louis Collins, Virginie Callot, Nikola Stikov, Julien Cohen-Adad, PAM50: Unbiased multimodal template of the brainstem and spinal cord aligned with the ICBM152 space, NeuroImage, Volume 165, 2018, Pages 170-179, ISSN 1053-8119, https://doi.org/10.1016/j.neuroimage.2017.10.041. </br>
+[6] De Leener B, Levy S, Dupont SM, Fonov VS, Stikov N, Louis Collins D, Callot V, Cohen-Adad J. SCT: Spinal Cord Toolbox, an open-source software for processing spinal cord MRI data. Neuroimage 2017. https://spinalcordtoolbox.com/index.html </br>
+[7] Marques JP, Meineke J, Milovic C, et al. QSM reconstruction challenge 2.0: A realistic in silico head phantom for MRI data simulation and evaluation of susceptibility mapping procedures. Magn Reson Med. 2021; 86: 526–542. https://doi.org/10.1002/mrm.28716 </br>
