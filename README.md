@@ -19,15 +19,16 @@ This repository uses the publicly available dataset provided by Gatidis et al [2
 
 We then group the labels separating them based on the susceptibility value relative to free space that we can use to create a new volume with differentiation of regions based only on the susceptibility. This volume can then be exported as a Nifti file, by default named sus_dist.nii.gz.
 
-![alt text](image.png)
+We used object oriented python programming to create 2 classes. The first class is the parent class that recieves as input a Nifti file containing the labeled body from Total Segmentator. When an instance of this class is created, using the look up table from Wasserthal et al. [3], all the labels from the file are instanced as Label class (daughter class). When a Label object is created it is automatically attributed relaxation times and proton density values based on literature values depending on the label ID.
 
-We used object oriented python programming to create 2 classes. The first class is the parent class that recieves as input a Nifti file containing the labeled body from Total Segmentator. When an instance of this class is created, given the look up table from Wasserthal et al. [3] we 
+An interactive jupyter notebook is provided with comments and an example workflow to understand how the code works and how to use the different implemented methods as the code from this repository is not limited to the usage of the example Nifti file used. It will work with any Nifti file that is an output of Total Segmentator. 
 
-####### POLISH THIS LATER ######
+# Folder description
 
-Inside the raw data folder you will find the CT whole body Nifti from Gatidis et al. As well as a Nifti file containing the segmentation of the whole body CT done with TotalSegmentator [3].
+Inside the data folder you will find a raw data folder with the example output of Total Segmentator when using the aforementioned dataset as well as a file containing the relaxation times selected for the assignment on the labels.
+ 
+In the post processing folder you will find a file that is used to recover the body's fat and shape as total segmentator will loose the soft tissue that is arround the organs and that is also limiting the body from the outside. There are also 3 other files: final_total_seg is the file that takes into account the fat and muscle inside the body, new_sc_label file addresses the issue that Total Segmentator will not segment the CSF surrounding the spinal cord and will label as spinal cord the region of the body that is really the Spinal canal and final_sc_seg is the file that introduces 2 new labels to the segmentation: SC_CSF for the cerobrospinal fluid surrounding the spinal cord and Spinal Cord. In order to create this labels, the CT Nifti file was registered to the PAM50 template [5] using Spinal Cord Toolbox [6]. 
 
-The post processing folder contains the files used in the interactive notebook. The file from total segmentator contains 114 label. Each label has a susceptibility value. The final segmentation includes a label for fat which is not included in the initial Total Segmentator.
 
 Explain about the way the classes work
 
@@ -50,3 +51,5 @@ pipeline tool for phase images. Neuroimage 227, 117611. </br>
 [2] Gatidis, S., Hepp, T., Früh, M. et al. A whole-body FDG-PET/CT Dataset with manually annotated Tumor Lesions. Sci Data 9, 601 (2022). https://doi.org/10.1038/s41597-022-01718-3 </br>
 [3] Wasserthal, J., Breit, H.-C., Meyer, M.T., Pradella, M., Hinck, D., Sauter, A.W., Heye, T., Boll, D., Cyriac, J., Yang, S., Bach, M., Segeroth, M., 2023. TotalSegmentator: Robust Segmentation of 104 Anatomic Structures in CT Images. Radiology: Artificial Intelligence. https://doi.org/10.1148/ryai.230024 </br>
 [4] QSM Consensus Organization Committee; Bilgic B, Costagli M, Chan KS, Duyn J, Langkammer C, Lee J, Li X, Liu C, Marques JP, Milovic C, Robinson S, Schweser F, Shmueli K, Spincemaille P, Straub S, van Zijl P, Wang Y; ISMRM Electro-Magnetic Tissue Properties Study Group. Recommended Implementation of Quantitative Susceptibility Mapping for Clinical Research in The Brain: A Consensus of the ISMRM Electro-Magnetic Tissue Properties Study Group. ArXiv [Preprint]. 2023 Jul 5:arXiv:2307.02306v1. Update in: Magn Reson Med. 2024 May;91(5):1834-1862. doi: 10.1002/mrm.30006. PMID: 37461418; PMCID: PMC10350101.
+[5] Benjamin De Leener, Vladimir S. Fonov, D. Louis Collins, Virginie Callot, Nikola Stikov, Julien Cohen-Adad, PAM50: Unbiased multimodal template of the brainstem and spinal cord aligned with the ICBM152 space, NeuroImage, Volume 165, 2018, Pages 170-179, ISSN 1053-8119, https://doi.org/10.1016/j.neuroimage.2017.10.041.
+[6] De Leener B, Levy S, Dupont SM, Fonov VS, Stikov N, Louis Collins D, Callot V, Cohen-Adad J. SCT: Spinal Cord Toolbox, an open-source software for processing spinal cord MRI data. Neuroimage 2017. https://spinalcordtoolbox.com/index.html
