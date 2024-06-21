@@ -110,7 +110,7 @@ class SegmentationLabel:
     def set_t2star_val(self,t2star):
         self.T2star_val = t2star
 
-    def __repr__(self):
+    def __str__(self):
         # Add the latest attributes additioned to the class
         return (f"SegmentationLabel(label_id={self.label_id}, name={self.name}, susceptibility={self.susceptibility},"
                 f"M0={self.M0_val}, T1,T2,T2* = {self.T1_val,self.T2_val,self.T2star_val}, PD = {self.PD_val} )")

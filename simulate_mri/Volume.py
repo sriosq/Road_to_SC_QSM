@@ -40,7 +40,8 @@ class Volume:
         # The most important labels are:
         # lungs Bone Soft Tissue SpinalCord CSF
         # These are the regions of the body that impact the most
-        #
+        # For susceptibility values: https://pfeifer.phas.ubc.ca/refbase/files/Truong-MRI-2002-20-759.pdf
+        # from bone, fat and softtissue
         # We can create an already pre-defined from convention of label_ids
 
         # In TotalSegmentator this is labeled Spinal Cord, but
@@ -60,25 +61,27 @@ class Volume:
         # For the lungs we have [9,10,11,12,13]
         for i in [9,10,11,12,13]:
             self.set_label_name(i,'lungs')
-            self.set_label_susceptibility(i,0.35)
+            self.set_label_susceptibility(i,0.4)
 
         # For the bones we have a lot more labels
         # Vertebrae and ribs. But all of them can have the same value: -11.1
         # Vertebrae list goes from Sacrum to C1
         vertebra_list = np.arange(22,48)
         rib_list = np.append(np.arange(89,114),[68,69,70,71,74,75,88])
+
+        # It was -11.1, but now it is -9.0
         for i in vertebra_list:
             self.set_label_name(i,"bone")
-            self.set_label_susceptibility(i,-11.1)
+            self.set_label_susceptibility(i,-9.0)
 
         for i in rib_list:
             self.set_label_name(i, "bone")
-            self.set_label_susceptibility(i, -11.1)
+            self.set_label_susceptibility(i, -9.0)
 
         # Last but not least is to give susceptibility values to the organs
         # and soft tissue => susceptibility value of water = -9.05
 
-        sus_water_list = [1, 2, 3, 4, 5, 6, 7, 8, 14, 15, 16]
+        sus_water_list = [1, 2, 3, 4, 5, 6, 7, 8, 14, 16]
 
         self.set_label_name(1, "spleen")
         self.set_label_name(2, "kidney") #Right
@@ -98,6 +101,9 @@ class Volume:
         for i in sus_water_list:
             self.set_label_susceptibility(i, -9.05)
 
+        # For trachea, it should have a susceptibilty value closer to air
+        self.set_label_susceptibility(15, 0.4)
+
         # Soft tissue == water
         # Inside of body == fat
 
@@ -106,7 +112,8 @@ class Volume:
         self.set_label_susceptibility(0,0.35)
 
         # If label has not been set it can be considered as fat
-        # susceptibility of fat label = (sus_fat + sus_muscle)/2 = -8.39 + -9.03 div2 = -8.71
+        # susceptibility of fat label is considering fat and muscle proportion of the body
+        # sus of fat is -7.5 and muscle is -9.03
 
         self.set_label_name(264,"fat")
         self.set_label_susceptibility(264,-8.71)
@@ -138,24 +145,6 @@ class Volume:
             if self.segmentation_labels[i].name == None:
                 print("Label: ",self.segmentation_labels[i]["name"]," doesn't have name assigned")
 
-    def create_pd_vol(self):
-        # This method will use the lookup table of PD values to create a new volume
-        # This new volume will use the labels to quickly create a volume with ProtonDensity values
-
-        for i in range(self.dimensions[0]):
-            for j in range(self.dimensions[1]):
-                for k in range(self.dimensions[2]):
-
-                    pixel = self.volume[i,j,k]
-                    label = self.segmentation_labels[pixel]
-                    pd = label.PD_val
-                    if pd == None:
-                        # THis means the label does not have PD defined
-                        self.pd_dist[i,j,k] = 0
-                    else:
-                        # If the label has PD value it will put this value on the volume
-                        self.pd_dist[i,j,k] = pd
-        return self.pd_dist
     def set_label_name(self, label_id, name):
         if label_id in self.uniq_labels:
             self.segmentation_labels[label_id].set_name(name)
@@ -182,16 +171,16 @@ class Volume:
         show_slices(self.volume)
 
 
-    def manual_labeling(self):
-        #To iterate over self unique labels we need its total length
-        for i in range(len(self.uniq_labels)):
-            name = input(f"Enter name for label #{i}: ") 
-            label = SegmentationLabel(i, name)
-            # Complete later for all attributes
+    def manual_label(self,id,name,sus):
+        if id in self.uniq_labels:
+            label = self.segmentation_labels[id]
+            label.name = name
+            label.sus = sus
 
     def show_labels(self):
-        for i in range(len(self.uniq_labels)):
-            print(i)
+        for i in self.segmentation_labels:
+            label = self.segmentation_labels[i]
+            print(label) # Calling __str__ from label
 
 
     def create_sus_dist(self):
@@ -221,6 +210,25 @@ class Volume:
         # Save the new NIfTI image to a file
         nib.save(temp_img,"output/sus_dist.nii.gz")
         del temp_img
+
+    def create_pd_vol(self):
+        # This method will use the lookup table of PD values to create a new volume
+        # This new volume will use the labels to quickly create a volume with ProtonDensity values
+
+        for i in range(self.dimensions[0]):
+            for j in range(self.dimensions[1]):
+                for k in range(self.dimensions[2]):
+
+                    pixel = self.volume[i,j,k]
+                    label = self.segmentation_labels[pixel]
+                    pd = label.PD_val
+                    if pd == None:
+                        # THis means the label does not have PD defined
+                        self.pd_dist[i,j,k] = 0
+                    else:
+                        # If the label has PD value it will put this value on the volume
+                        self.pd_dist[i,j,k] = pd
+        return self.pd_dist
 
     def save_pd_dist(self):
         # Method to save the proton density distribution created to nifti

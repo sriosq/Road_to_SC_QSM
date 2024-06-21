@@ -1,4 +1,4 @@
-name: brainhack_project
+name: Road_to_SC_QSM
 channels:
   - defaults
   - conda-forge
