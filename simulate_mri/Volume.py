@@ -113,10 +113,12 @@ class Volume:
 
         # If label has not been set it can be considered as fat
         # susceptibility of fat label is considering fat and muscle proportion of the body
-        # sus of fat is -7.5 and muscle is -9.03
+        # sus of fat is -7.5, muscle is -9.05 and soft tissue is -9.5
+        # Assuming that body is 20% fat, 40% muscle and 40% soft tissue
+        # The weighted average of the fat label should be: -8.92
 
         self.set_label_name(264,"fat")
-        self.set_label_susceptibility(264,-8.71)
+        self.set_label_susceptibility(264,-8.92)
 
         # For simulating GRE acquisition we need to set name of organs
         # brain, liver, spleen, kidney
