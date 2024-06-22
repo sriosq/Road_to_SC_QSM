@@ -6,6 +6,7 @@ from simulate_mri import *
 from simulate_mri.utils.simulation_functions import create_dipole_kernel, generate_signal, show_slices
 import scipy.ndimage
 from simulate_mri.utils.get_dic_values import to_csv_sus, to_csv_relax
+import os
 
 # Parent class for the creation of a non-finite biomechanical model of the body
 class Volume:
@@ -30,6 +31,12 @@ class Volume:
 
         self.create_labels()
         # This is the Convention Dictionary for labels_id - names - sus_values
+
+        # Creating folders for the code
+        if not os.path.exists("output"):
+            os.makedirs('output')
+        if not os.path.exists('simulation'):
+            os.makedirs('simulation')
 
     def create_labels(self):
        for label_id in self.uniq_labels:
@@ -209,9 +216,11 @@ class Volume:
     def save_sus_dist_nii(self):
         # Method to save the susceptibility distribution created to nifti
         temp_img = nib.Nifti1Image(self.sus_dist, affine=self.nifti.affine)
+        path = os.path.join('output','sus_dist.nii.gz')
         # Save the new NIfTI image to a file
-        nib.save(temp_img,"output/sus_dist.nii.gz")
+        nib.save(temp_img,path)
         del temp_img
+        del path
 
     def create_pd_vol(self):
         # This method will use the lookup table of PD values to create a new volume
@@ -236,24 +245,31 @@ class Volume:
         # Method to save the proton density distribution created to nifti
         temp_img = nib.Nifti1Image(self.pd_dist, affine=self.nifti.affine)
         # Save the new NIfTI image to a file
-        nib.save(temp_img,"output/pd_dist.nii.gz")
+        path = os.path.join('output', 'pd_dist.nii.gz')
+        nib.save(temp_img,path)
         del temp_img
+        del path
 
     def calculate_deltaB0(self,B0_dir =[0,0,1]):
 
         voxel_size = self.nifti.header["pixdim"][1:4]
-        padded_dims = tuple(2*self.dimensions)
-        D = create_dipole_kernel(B0_dir,voxel_size,self.dimensions)
+        buffer = 1
+        D = create_dipole_kernel(B0_dir,voxel_size,self.dimensions,buffer=buffer)
+        padded_dims = self.dimensions*buffer
 
-        sus_dist_padded = np.zeros(padded_dims,dtype=np.float32)
-        sus_dist_padded[:self.dimensions[0], :self.dimensions[1], :self.dimensions[2]] = self.sus_dist
+        fft_chi = np.fft.fftn(self.sus_dist,padded_dims)
 
-        self.deltaB0 = np.real(np.fft.ifftn(np.fft.fftn(sus_dist_padded)*D))
+        Bz_fft = fft_chi*D
+
+        vol_no_buff = np.real(np.fft.ifftn(Bz_fft))
+        self.deltaB0 = vol_no_buff[0:self.dimensions[0], 0:self.dimensions[1], 0:self.dimensions[2]]
 
     def save_deltaB0(self):
         temp_img = nib.Nifti1Image(self.deltaB0, affine=self.nifti.affine)
-        nib.save(temp_img,"output/freq_map.nii.gz")
+        path = os.path.join('output', 'freq_map.nii.gz')
+        nib.save(temp_img,path)
         del temp_img
+        del path
     # This version of the code assumes that TR is long enough for all Longitudinal Magnetization to return
     # to its equilibrium value
     def simulate_measurement(self,FA,TE,B0=3):
@@ -292,29 +308,35 @@ class Volume:
     def get_Magnitude(self):
         self.magnitude = np.abs(self.measurement)
         temp_img = nib.Nifti1Image(self.magnitude, affine=self.nifti.affine)
+        path = os.path.join('simulation','magnitude.nii.gz')
         # Save the new NIfTI image to a file
-        nib.save(temp_img, "simulation/magnitude.nii.gz")
+        nib.save(temp_img, path)
         del temp_img
+        del path
 
     def get_Phase(self):
         self.phase = np.angle(self.measurement)
         temp_img = nib.Nifti1Image(self.phase, affine=self.nifti.affine)
+        path = os.path.join('simulation','phase.nii.gz')
         # Save the new NIfTI image to a file
-        nib.save(temp_img, "simulation/phase.nii.gz")
+        nib.save(temp_img, path)
         del temp_img
-
+        del path
     def get_Real(self):
         self.real = np.real(self.measurement)
         temp_img = nib.Nifti1Image(self.real, affine=self.nifti.affine)
+        path = os.path.join('simulation','real.nii.gz')
         # Save the new NIfTI image to a file
-        nib.save(temp_img, "simulation/real.nii.gz")
+        nib.save(temp_img, path)
         del temp_img
+        del path
 
     def get_Imaginary(self):
         self.imag = np.imag(self.measurement)
         temp_img = nib.Nifti1Image(self.imag, affine=self.nifti.affine)
+        path = os.join('simulation','imaginary.nii.gz')
         # Save the new NIfTI image to a file
-        nib.save(temp_img, "simulation/imaginary.nii.gz")
+        nib.save(temp_img, path)
         del temp_img
 
 

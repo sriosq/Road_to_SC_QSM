@@ -5,31 +5,24 @@ import numpy as np
 import matplotlib.pyplot as plt
 import nibabel as nib
 
-def create_dipole_kernel(B0_dir, voxel_size,dimensions):
+def create_dipole_kernel(B0_dir, voxel_size,dimensions,buffer=1):
 
-    B0_dir = np.array(B0_dir)
-    B0_dir = B0_dir / np.linalg.norm(B0_dir)
-
+    #B0_dir = np.array(B0_dir)
+    #B0_dir = B0_dir / np.linalg.norm(B0_dir)
+    dims = dimensions*buffer
     # Extract dimensions for each axis
-    Nx, Ny, Nz = 2*dimensions
+    kmax = 1/(2*voxel_size)
+    interval = 2*kmax/dims
+    [kx, ky, kz] = np.meshgrid(np.arange(-kmax[0], kmax[0], interval[0]),
+                                np.arange(-kmax[1], kmax[1], interval[1]),
+                                np.arange(-kmax[2], kmax[2], interval[2]))
+    k_sqrd = kx ** 2 + ky ** 2 + kz ** 2
 
-    # Generate the frequenc grid
-    kx = np.fft.fftfreq(Nx, voxel_size[0]).astype(np.float32)
-    ky = np.fft.fftfreq(Ny, voxel_size[1]).astype(np.float32)
-    kz = np.fft.fftfreq(Nz, voxel_size[2]).astype(np.float32)
+    with np.errstate(divide='ignore', invalid='ignore'):
+        kernel = np.fft.fftshift(1/3 - kz**2/k_sqrd)
+        kernel[0,0,0] = 1/3
 
-    kx, ky, kz = np.meshgrid(kx, ky, kz, indexing='ij')
-
-    k_dot_B0 = kx * B0_dir[0] + ky * B0_dir[1] + kz * B0_dir[2]
-
-    k_squared = kx ** 2 + ky ** 2 + kz ** 2
-
-    k_squared[0, 0, 0] = 1 # This to avoid division by zero at the origin
-
-    dipole_kernel = 1 / 3 - (k_dot_B0 ** 2 / k_squared)
-    dipole_kernel[0, 0, 0] = 0  # Set the DC component to zero
-
-    return dipole_kernel
+    return kernel
 
 def show_slices(slices):
    """ Function to display row of image slices """
