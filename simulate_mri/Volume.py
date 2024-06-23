@@ -3,7 +3,7 @@ import numpy as np
 from simulate_mri.label import SegmentationLabel
 import nibabel as nib
 from simulate_mri import *
-from simulate_mri.utils.simulation_functions import create_dipole_kernel, generate_signal, show_slices
+from simulate_mri.utils.simulation_functions import create_dipole_kernel, generate_signal, show_slices, optimized_signal
 import scipy.ndimage
 from simulate_mri.utils.get_dic_values import to_csv_sus, to_csv_relax
 import os
@@ -21,11 +21,9 @@ class Volume:
         self.uniq_labels = np.unique(self.volume)
         self.segmentation_labels = {} 
         self.sus_dist = np.zeros(self.dimensions)
+        self.t2star_vol = np.zeros(self.dimensions)
         self.pd_dist = np.zeros(self.dimensions)
         self.deltaB0 = np.zeros(self.dimensions)
-
-        self.magnitude = np.zeros(self.dimensions)
-        self.phase = np.zeros(self.dimensions)
         # The dictionary has keys for every id number and each value 
         # is the corresponding SegmentationLabel daughter class
 
@@ -37,6 +35,11 @@ class Volume:
             os.makedirs('output')
         if not os.path.exists('simulation'):
             os.makedirs('simulation')
+
+        self.magnitude = None
+        self.phase = None
+        self.real = None
+        self.imaginary = None
 
     def create_labels(self):
        for label_id in self.uniq_labels:
@@ -239,7 +242,26 @@ class Volume:
                     else:
                         # If the label has PD value it will put this value on the volume
                         self.pd_dist[i,j,k] = pd
-        return self.pd_dist
+
+
+    def create_t2_star_vol(self):
+        # This method will use the lookup table of T2 star values to create a new volume
+        # This new volume will use the labels to quickly create a volume with relaxation time
+
+        for i in range(self.dimensions[0]):
+            for j in range(self.dimensions[1]):
+                for k in range(self.dimensions[2]):
+
+                    pixel = self.volume[i,j,k]
+                    label = self.segmentation_labels[pixel]
+                    t2star = label.T2star_val
+                    if t2star == None:
+                        # THis means the label does not have T2 star value defined
+                        self.pd_dist[i,j,k] = 0.001
+                    else:
+                        # If the label has value it will put this value on the volume
+                        self.t2star_vol[i,j,k] = t2star
+
 
     def save_pd_dist(self):
         # Method to save the proton density distribution created to nifti
@@ -250,7 +272,7 @@ class Volume:
         del temp_img
         del path
 
-    def calculate_deltaB0(self,B0_dir =[0,0,1]):
+    def calculate_deltaB0(self,B0_dir =[0,0,1], T=3):
 
         voxel_size = self.nifti.header["pixdim"][1:4]
         buffer = 1
@@ -262,7 +284,11 @@ class Volume:
         Bz_fft = fft_chi*D
 
         vol_no_buff = np.real(np.fft.ifftn(Bz_fft))
+        # This Bz_fft will come in ppm
         self.deltaB0 = vol_no_buff[0:self.dimensions[0], 0:self.dimensions[1], 0:self.dimensions[2]]
+        # To set a Tesla value it will be an input, but for now is default at 3T
+        gamma = 42.58e6 # At 1 tesla, will be scaled by T, default 3
+        self.deltaB0 = self.deltaB0*T*gamma*1e-6
 
     def save_deltaB0(self):
         temp_img = nib.Nifti1Image(self.deltaB0, affine=self.nifti.affine)
@@ -283,8 +309,11 @@ class Volume:
         newVol_dims = list(self.dimensions)
         newVol_dims.append(num_TE)
         # This way we can iterate over the last dimension (TEs)
-        self.measurement = np.zeros(newVol_dims)
-        gamma = 267.52218744e6*3/B0# Using gamma for 3 Tesla, B0 is optional to change
+
+        self.magnitude = np.zeros(newVol_dims)
+        self.phase = np.zeros(newVol_dims)
+
+        gamma = 267.52218744e6*3/B0# Using gamma for 3 Tesla, B0 is optional to change => This is rad*Hz/Tesla
         handedness = 'left'
 
         for te in range(num_TE):
@@ -301,12 +330,35 @@ class Volume:
                         self.magnitude[i,j,k,te] = mag
                         self.phase[i,j,k,te] = phase
 
-        return self.measurement
     # Line to implement from MATLAB
     # signal = pd*sind(FA)*exp(-TE./T2star-sign*1i*gamma*deltaB0*TE)
 
+    def optimize_measurement(self,FA,TE,B0=3):
+        # This code seeks to accomplish the same as the above method but
+        # We are trying to optimize by using volumes
+        self.create_pd_vol()
+        self.create_t2_star_vol()
+        self.calculate_deltaB0()
+
+        # TE should be a list, so we create a new volume
+        num_TE = len(TE)
+        newVol_dims = list(self.dimensions)
+        newVol_dims.append(num_TE)
+        # This way we can iterate over the last dimension (TEs)
+
+        self.magnitude = np.zeros(newVol_dims)
+        self.phase = np.zeros(newVol_dims)
+
+        gamma = 267.52218744e6 * 3 / B0  # Using gamma for 3 Tesla, B0 is optional to change => This is rad*Hz/Tesla
+        handedness = 'left'
+
+        for te_idx, TE in enumerate(TE):
+            mag,phase = optimized_signal(self.pd_dist, self.t2star_vol, FA, TE, self.deltaB0, gamma, handedness)
+            self.magnitude[...,te_idx] = mag
+            self.phase[...,te_idx] = phase
+
+
     def get_Magnitude(self):
-        self.magnitude = np.abs(self.measurement)
         temp_img = nib.Nifti1Image(self.magnitude, affine=self.nifti.affine)
         path = os.path.join('simulation','magnitude.nii.gz')
         # Save the new NIfTI image to a file
@@ -315,7 +367,6 @@ class Volume:
         del path
 
     def get_Phase(self):
-        self.phase = np.angle(self.measurement)
         temp_img = nib.Nifti1Image(self.phase, affine=self.nifti.affine)
         path = os.path.join('simulation','phase.nii.gz')
         # Save the new NIfTI image to a file
@@ -323,7 +374,6 @@ class Volume:
         del temp_img
         del path
     def get_Real(self):
-        self.real = np.real(self.measurement)
         temp_img = nib.Nifti1Image(self.real, affine=self.nifti.affine)
         path = os.path.join('simulation','real.nii.gz')
         # Save the new NIfTI image to a file
@@ -332,7 +382,6 @@ class Volume:
         del path
 
     def get_Imaginary(self):
-        self.imag = np.imag(self.measurement)
         temp_img = nib.Nifti1Image(self.imag, affine=self.nifti.affine)
         path = os.join('simulation','imaginary.nii.gz')
         # Save the new NIfTI image to a file
@@ -342,7 +391,8 @@ class Volume:
 
 
     # Implementation of the code to simulate MRI data acquisition
-    # This code is more complex as it assumes that there is still Longitudinal Magnetizatation
+    # This code is more complex as it assumes that there is still Longitudinal Magnetizatation - T1 T2 and M0
+    # Values are necessary
     def simulate_signal_hard(self,TE,TR,theta,B0):
         # Theta is a fixed angle // TE can be multiple echo time array or 1 echo time
         # TR is the repetition time

@@ -33,6 +33,12 @@ def show_slices(slices):
 
 def generate_signal(pd, T2star, FA, TE, deltaB0, gamma, handedness):
     # This code is for creating the volume dimensions with new dimension for each TE
+    # FA is the flip angle in degrees
+    # T2 star value will input in ms
+    # TE will be a list of echo times in s
+    # B0 is to specify the value of Tesla
+    # Gamma in rad*Hz/Tesla
+
     if handedness == 'left':
         sign = -1
     elif handedness == 'right':
@@ -43,8 +49,23 @@ def generate_signal(pd, T2star, FA, TE, deltaB0, gamma, handedness):
     #if T2star == 0:
     #    signal = pd * np.sin(np.deg2rad(FA))
     #else:
-    signal = pd * np.sin(np.deg2rad(FA)) * np.exp(-TE / T2star - sign * 1j * gamma * deltaB0 * TE)
+
+    # The FA inptu should be in degrees so we convert to radians
+    # The lookup table has values in ms so we need to multiply by 10^-3
+    # Because input TE is in seconds
+    signal = pd * np.sin(np.deg2rad(FA)) * np.exp(-TE / T2star*1e-3- sign * 1j * gamma * deltaB0 * TE)
+
     mag = np.abs(signal)
     phase = np.angle(signal)
 
     return mag,phase
+
+def optimized_signal(pd_vol,T2star_vol, FA, TE, deltaB0_vol, gamma, handedness):
+    # This is an optimized version from generate_signal, using numpy array matrices
+    decay = np.exp(-TE / (T2star_vol * 1e-3))  # Convert T2* to ms and apply decay
+    phase_factor = -1j * gamma * deltaB0_vol * TE * 1e-3 if handedness == 'left' else 1j * gamma * deltaB0_vol * TE * 1e-3
+    # Phase factor in radians
+
+    signal = pd_vol * np.sin(FA) * decay * np.exp(phase_factor)
+
+    return np.abs(signal), np.angle(signal) # Abs for the Magnitude whereas angle for Phase

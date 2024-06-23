@@ -15,6 +15,7 @@ class SegmentationLabel:
         self.PD_val = 0
 
         # Key is the name and value is ordered: M0, T1, T2, T2*, PD
+        # The values of T2* and T2 are in ms
         self.relax_values = {
             "air": [0, 0, 0, 0.01, 0.01],
             "bone": [None, 1204, 53, 33.03, 117],  # M0 is often not specified for bone
