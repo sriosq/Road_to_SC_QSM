@@ -50,7 +50,7 @@ def generate_signal(pd, T2star, FA, TE, deltaB0, gamma, handedness):
     #    signal = pd * np.sin(np.deg2rad(FA))
     #else:
 
-    # The FA inptu should be in degrees so we convert to radians
+    # The FA input should be in degrees so we convert to radians
     # The lookup table has values in ms so we need to multiply by 10^-3
     # Because input TE is in seconds
     signal = pd * np.sin(np.deg2rad(FA)) * np.exp(-TE / T2star*1e-3- sign * 1j * gamma * deltaB0 * TE)
@@ -62,6 +62,7 @@ def generate_signal(pd, T2star, FA, TE, deltaB0, gamma, handedness):
 
 def optimized_signal(pd_vol,T2star_vol, FA, TE, deltaB0_vol, gamma, handedness):
     # This is an optimized version from generate_signal, using numpy array matrices
+
     decay = np.exp(-TE / (T2star_vol * 1e-3))  # Convert T2* to ms and apply decay
     phase_factor = -1j * gamma * deltaB0_vol * TE * 1e-3 if handedness == 'left' else 1j * gamma * deltaB0_vol * TE * 1e-3
     # Phase factor in radians

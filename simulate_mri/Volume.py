@@ -313,7 +313,7 @@ class Volume:
         self.magnitude = np.zeros(newVol_dims)
         self.phase = np.zeros(newVol_dims)
 
-        gamma = 267.52218744e6*3/B0# Using gamma for 3 Tesla, B0 is optional to change => This is rad*Hz/Tesla
+        gamma = 42.58e6*B0# Using gamma for 3 Tesla, B0 is optional to change => This is rad*Hz/Tesla
         handedness = 'left'
 
         for te in range(num_TE):
@@ -349,7 +349,7 @@ class Volume:
         self.magnitude = np.zeros(newVol_dims)
         self.phase = np.zeros(newVol_dims)
 
-        gamma = 267.52218744e6 * 3 / B0  # Using gamma for 3 Tesla, B0 is optional to change => This is rad*Hz/Tesla
+        gamma = 42.58e6 * B0  # Using gamma for 3 Tesla as default, B0 is optional to change => This is rad*Hz/Tesla
         handedness = 'left'
 
         for te_idx, TE in enumerate(TE):
@@ -424,10 +424,6 @@ class Volume:
         vol = np.zeros(self.dimensions)
 
 
-
-
-
-
     #This is a method that can be later tested but as of now, It should work just fine
     def compute_Bz(self, res, buffer):
         #For later implementation
@@ -467,13 +463,15 @@ class Volume:
         data = []
         for i in self.segmentation_labels.keys():
             label = self.segmentation_labels[i]
-            if label.name is not None and label.susceptibility is not None and label.name not in data[1]:
+            if label.name is not None and label.susceptibility is not None and label.name not in data:
                 # The last is to get unique names 
-                data.append({"Label ID": label.label_id,
+                data.append({
                     "Name": label.name,
-                    "Susceptibility": label.susceptibility})
+                    "Susceptibility": label.susceptibility
+                })
         # Call funtion that creates CSV
-        to_csv_sus(data,"data/susceptibility_values.csv")
+        path = os.path.join('data','susceptibility_values.csv')
+        to_csv_sus(data,path)
 
     def save_relax_csv(self):
         # Further implementation to go through self.relax values of each label?
